@@ -1,7 +1,11 @@
 {
-	"name": "Rice Bowl",
-	"short_name": "Rice Bowl",
-	"description": "Fluffless jasmine rice for those cold winter nights",
+	"name": "DartApp",
+	"short_name": "DartApp",
+	"description": "A Progressive Web App for managing players and courts",
+	"start_url": "/DartApp/index.html",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#000000",
 	"icons": [
 		{
 			"src": "/images/icon-192.png",
@@ -26,8 +30,6 @@
 			"purpose": "maskable"
 		}
 	],
-	"start_url": "/?source=pwa",
 	"orientation": "portrait",
-	"display": "standalone",
 	"scope": "/"
 }
