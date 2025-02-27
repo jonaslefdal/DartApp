@@ -13,11 +13,11 @@ export default function Document() {
 
 				<meta name="theme-color" content="#18181b" media="(prefers-color-scheme: dark)" />
 				<meta name="theme-color" content="#f4f4f5" media="(prefers-color-scheme: light)" />
-				
+
 				<link rel='apple-touch-icon' href='/images/icon-maskable-512.png' />
 				<link rel='manifest' href='/manifest.json' />
 				
-				<meta name="apple-mobile-web-app-capable" content="yes" />
+				<meta name="mobile-web-app-capable" content="yes" />
 				<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 				<meta name="apple-mobile-web-app-title" content="DartApp" />
 			</Head>

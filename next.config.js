@@ -10,8 +10,8 @@ const withPWA = require("next-pwa")({
 	images: {
 	  unoptimized: true, // Required for GitHub Pages
 	},
-	basePath: "/DartApp", // Change this to match your GitHub repo name
-	assetPrefix: "/DartApp/",
+	basePath: process.env.NODE_ENV === "production" ? "/DartApp" : "", // Only use basePath in production
+	assetPrefix: process.env.NODE_ENV === "production" ? "/DartApp/" : "",
 	reactStrictMode: true,
   });
   
