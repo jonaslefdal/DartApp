@@ -18,7 +18,6 @@ jobs:
       - name: Build & Export
         run: |
           npm run build
-          npm run export
           touch out/.nojekyll  # Prevents GitHub Pages CSS issues
 
       - name: Deploy to GitHub Pages
