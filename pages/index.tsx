@@ -45,7 +45,7 @@ const Index = () => {
 	<Page>
 		<Section>
 			<h2 className='text-xl font-semibold text-zinc-800 dark:text-zinc-200'>
-				Velg lag nå.
+				Velg lag nå 10 f.
 			</h2>
 
 			<div className='mt-2'>
