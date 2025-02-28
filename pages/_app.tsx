@@ -8,18 +8,26 @@ function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   useEffect(() => {
-    // Ensure navigation stays inside the PWA and prevents opening Safari
-    if (window.matchMedia("(display-mode: standalone)").matches) {
-      document.addEventListener("click", (event) => {
-        const target = event.target as HTMLAnchorElement;
-
-        if (target.tagName === "A" && target.href.startsWith(window.location.origin)) {
-          event.preventDefault();
-          router.push(target.pathname);
-        }
-      });
-    }
-  }, []);
+	if (window.matchMedia("(display-mode: standalone)").matches) {
+	  document.addEventListener("click", (event) => {
+		let target = event.target as HTMLElement;
+  
+		// Traverse up in case the click was inside a nested element
+		while (target && target.tagName !== "A") {
+		  target = target.parentElement as HTMLElement;
+		}
+  
+		if (target && target.tagName === "A") {
+		  const link = target as HTMLAnchorElement;
+		  if (link.href.startsWith(window.location.origin)) {
+			event.preventDefault();
+			router.push(new URL(link.href).pathname);
+		  }
+		}
+	  });
+	}
+  }, [router]);
+  
     return (
     <ThemeProvider
       attribute="class"
