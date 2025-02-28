@@ -20,7 +20,7 @@ const Index = () => {
   };
   
 const [players, setPlayers] = useState<string[]>([""]); // Default state
-const [courts, setCourts] = useState<string[]>(["Court 1", "Court 2"]);
+const [courts, setCourts] = useState<string[]>(["Bane 1", "Bane 2"]);
 const [isLoaded, setIsLoaded] = useState(false); // Track if data is loaded
 
 // ✅ Load data from localStorage AFTER the component mounts (Client-side only)
@@ -67,13 +67,13 @@ useEffect(() => {
 
   // Manually add players & courts
   const addPlayer = () => setPlayers([...players, ""]);
-  const addCourt = () => setCourts([...courts, `Court ${courts.length + 1}`]);
-  const removeCourt = () => setCourts([...courts, `Court ${courts.length - 1 }`]);
+  const addCourt = () => setCourts([...courts, `Bane ${courts.length + 1}`]);
+  const removeCourt = () => setCourts([...courts, `Bane ${courts.length - 1 }`]);
 
   // Clear data function
   const clearData = () => {
     //setPlayers([""]);
-    setCourts(["Court 1", "Court 2"]);
+    setCourts(["Bane 1", "Bane 2"]);
     //localStorage.removeItem("players");
     localStorage.removeItem("courts");
     localStorage.removeItem("matchups");
@@ -102,9 +102,9 @@ useEffect(() => {
             <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">Players</h3>
             {players.map((player, index) => (
               <Input
-                key={`player-${index}`}
-                label={`Player ${index + 1}`}
-                name={`player${index}`}
+                key={`spiller-${index}`}
+                label={`Spiller ${index + 1}`}
+                name={`spiller${index}`}
                 value={player}
                 onChange={(e) => handlePlayerChange(index, e)}
               />
@@ -114,7 +114,7 @@ useEffect(() => {
               onClick={addPlayer}
               className="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
             >
-              + Add Player
+              + Ny Spiller
             </button>
           </div>
 
@@ -123,9 +123,9 @@ useEffect(() => {
             <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">Courts</h3>
             {courts.map((court, index) => (
               <Input
-                key={`court-${index}`}
-                label={`Court ${index + 1}`}
-                name={`court${index}`}
+                key={`bane-${index}`}
+                label={`Bane ${index + 1}`}
+                name={`bane${index}`}
                 value={court}
                 onChange={(e) => handleCourtChange(index, e)}
               />
@@ -135,7 +135,7 @@ useEffect(() => {
               onClick={addCourt}
               className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
             >
-              + Add Court
+              + Ny Bane
             </button>
           </div>
 

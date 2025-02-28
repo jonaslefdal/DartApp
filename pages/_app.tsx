@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { ThemeProvider } from "next-themes";
 import type { AppProps } from "next/app";
 import "@/styles/globals.css";
+import router from "next/router";
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -16,6 +17,18 @@ export default function App({ Component, pageProps }: AppProps) {
         .register(swPath)
         .then(() => console.log("✅ Service Worker Registered"))
         .catch((err) => console.error("❌ Service Worker Registration Failed:", err));
+    }
+    // Check if the app is already running in PWA mode
+    const isPWA = window.matchMedia("(display-mode: standalone)").matches;
+    if (isPWA) return;
+
+    // Detect if the user is in Safari
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const isSafari = userAgent.includes("safari") && !userAgent.includes("chrome");
+
+    // If in Safari and NOT a PWA, redirect to install page
+    if (isSafari && router.pathname !== "/install") {
+      router.replace("/install");
     }
   }, []);
 

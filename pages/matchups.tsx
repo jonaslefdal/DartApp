@@ -93,7 +93,7 @@ const Matchups = () => {
         {onBreak.length > 0 && (
           <div className="bg-gray-900 p-4 rounded-lg shadow-lg mt-6">
             <h3 className="text-lg font-semibold text-center text-red-400 mb-2">
-              Players on Break
+              Spillere på pause
             </h3>
             <div className="flex flex-wrap justify-center gap-4">
               {onBreak.map((player, i) => (
@@ -109,15 +109,15 @@ const Matchups = () => {
         <div className="flex justify-center">
         <button
           onClick={regenerateTeams}
-          className="mt-6 px-6 py-2 bg-green-500 text-white rounded-md hover:bg-indigo-600"
+          className="mt-6 px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
         >
-          Generate New Teams
+          Generer nytt spill
         </button>
           <button
             onClick={() => router.push("/")}
             className="mt-6 px-6 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
           >
-            Back to Team Generator
+            Tilbake til personer
           </button>
         </div>
       </Section>
