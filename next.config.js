@@ -8,14 +8,14 @@ const withPWA = require("next-pwa")({
 const isProd = process.env.NODE_ENV === "production";
 
 const nextConfig = withPWA({
-	output: "export", // Enables static export for GitHub Pages
-	images: {
-		unoptimized: true, // Required for GitHub Pages
-	},
-	basePath: isProd ? "/DartApp" : "", // Only use basePath in production
-	assetPrefix: isProd ? "/DartApp/" : "",
-	reactStrictMode: true,
-	trailingSlash: true, // Ensures URLs work properly on GitHub Pages
+  output: "export", // Enables static export for GitHub Pages
+  images: {
+    unoptimized: true, // Required for GitHub Pages
+  },
+  basePath: isProd ? "/DartApp" : "", // Ensures correct routing
+  assetPrefix: isProd ? "/DartApp/" : "",
+  reactStrictMode: true,
+  trailingSlash: true, // Ensures GitHub Pages compatibility
 });
 
 module.exports = nextConfig;
