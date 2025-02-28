@@ -101,7 +101,7 @@ const Matchups = () => {
         {/* Back Button */}
         <div className="flex justify-center">
           <button
-            onClick={() => router.push("/")}
+            onClick={() => router.replace("/")}
             className="mt-6 px-6 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
           >
             Back to Team Generator

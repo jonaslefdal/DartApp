@@ -52,7 +52,7 @@ const links = [
 		),
 	},
 	{
-		label: 'Story',
+		label: 'Vev',
 		href: '/story',
 		icon: (
 			<svg
