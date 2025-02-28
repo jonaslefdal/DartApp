@@ -35,12 +35,14 @@ const InstallGuide = () => {
               <li>3️⃣ Bla ned og trykk på <span className="text-blue-500 font-bold">&quot;Legg til på Hjem-skjermen&quot;</span>.</li>
               <li>4️⃣ Bekreft ved å trykke på <span className="text-green-500 font-bold">&quot;Legg til&quot;</span>.</li>
             </ol>
+            
             <Image
-              src="/images/safari-install-guide.png"
-              alt="Installering av appen i Safari"
-              width={500}  
-              height={400} 
-              className="mx-auto mt-6 rounded-lg shadow-lg"
+            priority={true} // {false} | {true}
+            src="DartApp/images/safari-install-guide.png"
+            alt="Installering av appen i Safari"
+            width={500}  
+            height={400} 
+            className="mx-auto mt-6 rounded-lg shadow-lg"
             />
 
             <button
