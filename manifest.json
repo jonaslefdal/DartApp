@@ -2,7 +2,7 @@
 	"name": "DartApp",
 	"short_name": "DartApp",
 	"description": "A Progressive Web App for managing players and courts",
-	"start_url": "/DartApp/index.html",
+	"start_url": "/DartApp",
 	"display": "standalone",
 	"background_color": "#ffffff",
 	"theme_color": "#000000",
