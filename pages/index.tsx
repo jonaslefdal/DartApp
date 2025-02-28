@@ -2,9 +2,21 @@ import { useState, useEffect } from "react";
 import Page from "@/components/page";
 import Section from "@/components/section";
 import Input from "@/components/inputs";
+import { useRouter } from "next/router";
 
 const Index = () => {
+	const router = useRouter();
 
+
+  type Match = {
+    team1: string[];
+    team2: string[];
+  };
+  type Round = {
+    court: string;
+    matches: Match[];
+  };
+  
 const [players, setPlayers] = useState<string[]>([""]); // Default state
 const [courts, setCourts] = useState<string[]>(["Court 1", "Court 2"]);
 const [isLoaded, setIsLoaded] = useState(false); // Track if data is loaded
@@ -57,19 +69,98 @@ useEffect(() => {
 
   // Clear data function
   const clearData = () => {
-    setPlayers([""]);
+    //setPlayers([""]);
     setCourts(["Court 1", "Court 2"]);
-    localStorage.removeItem("players");
+    //localStorage.removeItem("players");
     localStorage.removeItem("courts");
+    localStorage.removeItem("matchups");
+    localStorage.removeItem("onBreak");
+    localStorage.removeItem("pastTeams");
+    localStorage.removeItem("pastPairs");
   };
 
-  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Saved Players:", players.filter(p => p.trim() !== ""));
-    console.log("Saved Courts:", courts.filter(c => c.trim() !== ""));
+  
+    let shuffledPlayers = [...players.filter(p => p.trim() !== "")].sort(() => Math.random() - 0.5);
+    const courtCount = courts.length;
+    const matchups: Round[] = [];
+    let onBreak: string[] = [];
+    
+    // Load or create pair history
+    let pastPairs: string[][] = JSON.parse(localStorage.getItem("pastPairs") || "[]");
+    let repeatedTeamLogged = false; // Flag to log the first repeated team occurrence
+  
+    // 1) Create courts
+    for (let i = 0; i < courtCount; i++) {
+      matchups.push({ court: courts[i], matches: [] });
+    }
+  
+    // 2) Check if a pair has played together
+    const hasPlayedTogether = (p1: string, p2: string) => {
+      return pastPairs.some(pair => pair.includes(p1) && pair.includes(p2));
+    };
+  
+    // 3) Get a team (2 players), try to avoid repeats.
+    // If unable to find a unique team after max attempts, allow repeats.
+    const getTeam = (allowRepeats = false): string[] => {
+      if (shuffledPlayers.length < 2) return [];
+      let attempts = 0;
+      const maxAttempts = shuffledPlayers.length * 2;
+      while (attempts < maxAttempts) {
+        const player1 = shuffledPlayers.pop()!;
+        const player2 = shuffledPlayers.pop()!;
+        if (allowRepeats || !hasPlayedTogether(player1, player2)) {
+          pastPairs.push([player1, player2]); // store new pair
+          return [player1, player2];
+        } else {
+          // Put them back and try again
+          shuffledPlayers.unshift(player2, player1);
+        }
+        attempts++;
+      }
+      // If we couldn't find a unique pair, allow repeats
+      const p1 = shuffledPlayers.pop()!;
+      const p2 = shuffledPlayers.pop()!;
+      if (!repeatedTeamLogged) {
+        console.warn("First matchup with an already played team encountered.");
+        repeatedTeamLogged = true;
+      }
+      pastPairs.push([p1, p2]);
+      return [p1, p2];
+    };
+  
+    // 4) Assign players to each court (one round)
+    for (let i = 0; i < courtCount; i++) {
+      if (shuffledPlayers.length < 4) break;
+      const team1 = getTeam(); // tries to avoid repeats
+      const team2 = getTeam(); // tries to avoid repeats
+      if (team1.length === 0 || team2.length === 0) {
+        continue;
+      }
+      matchups[i].matches.push({ team1, team2 });
+    }
+  
+    // 5) Leftover players → on break
+    onBreak = [...shuffledPlayers];
+  
+    console.log("Generated Matchups:", matchups);
+    console.log("Players on Break:", onBreak);
+    console.log("Past Pairs:", pastPairs);
+  
+    localStorage.setItem("matchups", JSON.stringify(matchups));
+    localStorage.setItem("onBreak", JSON.stringify(onBreak));
+    localStorage.setItem("pastPairs", JSON.stringify(pastPairs));
+  
+    router.push("/matchups");
   };
-
+  
+  
+  
+  
+  
+  
+  
   return (
     <Page>
       <Section>
