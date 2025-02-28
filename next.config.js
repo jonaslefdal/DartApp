@@ -12,11 +12,11 @@ const withPWA = require("next-pwa")({
 	images: {
 	  unoptimized: true, // Required for GitHub Pages
 	},
-	basePath: isProd ? "/DartApp" : "", // Only use basePath in production
+	basePath: isProd ? "/DartApp" : "",
 	assetPrefix: isProd ? "/DartApp/" : "",
 	reactStrictMode: true,
 	trailingSlash: true, // Ensures GitHub Pages compatibility
-	swcMinify: true, // Makes sure PWA loads faster
+	swcMinify: true,
   });
   
   module.exports = nextConfig;

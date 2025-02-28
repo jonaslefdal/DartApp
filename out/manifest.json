@@ -3,6 +3,7 @@
 	"short_name": "DartApp",
 	"description": "A Progressive Web App for managing players and courts",
 	"start_url": "/DartApp/",
+	"scope": "/DartApp/",
 	"display": "standalone",
 	"background_color": "#ffffff",
 	"theme_color": "#000000",
@@ -30,6 +31,5 @@
 			"purpose": "maskable"
 		}
 	],
-	"orientation": "portrait",
-	"scope": "/"
+	"orientation": "portrait"
 }
