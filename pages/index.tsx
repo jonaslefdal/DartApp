@@ -217,7 +217,7 @@ const getTeam = (allowRepeats = false): string[] => {
     localStorage.setItem("onBreak", JSON.stringify(onBreak));
     localStorage.setItem("pastPairs", JSON.stringify(pastPairs));
   
-    router.replace("/matchups");
+    router.push("/matchups");
   };
   
   
