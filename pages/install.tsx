@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Page from "@/components/page";
 import Section from "@/components/section";
 import { useRouter } from "next/router";
+import Image from "next/image";
+
 
 const InstallGuide = () => {
   const router = useRouter();
@@ -34,11 +36,14 @@ const InstallGuide = () => {
               <li>3️⃣ Bla ned og trykk på <span className="text-blue-500 font-bold">"Legg til på hjemskjerm"</span>.</li>
               <li>4️⃣ Confirm ved å trykke <span className="text-green-500 font-bold">"Legg til"</span>.</li>
             </ol>
-            <img
-              src="/images/safari-install-guide.png"
-              alt="How to install the PWA in Safari"
-              className="mx-auto mt-6 rounded-lg shadow-lg"
+            <Image
+            src="/images/safari-install-guide.png"
+            alt="Install Guide"
+            width={500}  // Adjust size as needed
+            height={400} // Adjust size as needed
+            className="mx-auto mt-6 rounded-lg shadow-lg"
             />
+
             <button
               onClick={() => router.push("/")}
               className="mt-6 px-6 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
