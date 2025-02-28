@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Page from "@/components/page";
 import Section from "@/components/section";
+import { generateMatchups } from "@/utils/teamGenerator";
+
 
 type Match = {
   team1: string[];
@@ -16,21 +18,26 @@ type Round = {
 const Matchups = () => {
   const router = useRouter();
   const [rounds, setRounds] = useState<Round[]>([]);
-  const [onBreak, setOnBreak] = useState<string[]>([]); // Players who didn't get assigned
+  const [onBreak, setOnBreak] = useState<string[]>([]);
+  const [players, setPlayers] = useState<string[]>([]);
+  const [courts, setCourts] = useState<string[]>([]);
 
   useEffect(() => {
-    const storedMatchups = localStorage.getItem("matchups");
-    if (storedMatchups) {
-      const parsedMatchups: Round[] = JSON.parse(storedMatchups);
-      setRounds(parsedMatchups);
-    }
-
-    // Get leftover players from storage
-    const storedBreakPlayers = localStorage.getItem("onBreak");
-    if (storedBreakPlayers) {
-      setOnBreak(JSON.parse(storedBreakPlayers));
-    }
+    setPlayers(JSON.parse(localStorage.getItem("players") || "[]"));
+    setCourts(JSON.parse(localStorage.getItem("courts") || "[]"));
+    setRounds(JSON.parse(localStorage.getItem("matchups") || "[]"));
+    setOnBreak(JSON.parse(localStorage.getItem("onBreak") || "[]"));
   }, []);
+
+  const regenerateTeams = () => {
+    if (players.length < 4) {
+      alert("Not enough players to generate teams.");
+      return;
+    }
+    const { matchups, onBreak } = generateMatchups(players, courts);
+    setRounds(matchups);
+    setOnBreak(onBreak);
+  };
 
   return (
     <Page>
@@ -100,6 +107,12 @@ const Matchups = () => {
 
         {/* Back Button */}
         <div className="flex justify-center">
+        <button
+          onClick={regenerateTeams}
+          className="mt-6 px-6 py-2 bg-green-500 text-white rounded-md hover:bg-indigo-600"
+        >
+          Generate New Teams
+        </button>
           <button
             onClick={() => router.push("/")}
             className="mt-6 px-6 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
