@@ -4,10 +4,13 @@ import Section from "@/components/section";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
+
 const InstallGuide = () => {
   const router = useRouter();
   const [isPWA, setIsPWA] = useState(false);
   const [isSafari, setIsSafari] = useState(false);
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 
   useEffect(() => {
     // Sjekk om appen kjører som en PWA
@@ -38,7 +41,7 @@ const InstallGuide = () => {
             
             <Image
             priority={true} // {false} | {true}
-            src={`${process.env.NEXT_PUBLIC_BASE_PATH}/images/safari-install-guide.png`} 
+            src={`${basePath}/images/safari-install-guide.png`} // Dynamically include basePath
             alt="Installering av appen i Safari"
             width={500}  
             height={400} 
