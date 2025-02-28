@@ -99,7 +99,7 @@ useEffect(() => {
         <form onSubmit={handleSubmit} className="mt-4 space-y-6">
           {/* Players */}
           <div>
-            <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">Players</h3>
+            <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">Spillere</h3>
             {players.map((player, index) => (
               <Input
                 key={`spiller-${index}`}
