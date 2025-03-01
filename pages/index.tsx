@@ -20,7 +20,7 @@ const Index = () => {
   };
   
 const [players, setPlayers] = useState<string[]>([""]); // Default state
-const [courts, setCourts] = useState<string[]>(["Bane 1", "Bane 2"]);
+const [courts, setCourts] = useState<string[]>(["Bane 1", "Bane 2", "Bane 3", "Bane 4"]);
 const [isLoaded, setIsLoaded] = useState(false); // Track if data is loaded
 
 // ✅ Load data from localStorage AFTER the component mounts (Client-side only)
@@ -68,12 +68,18 @@ useEffect(() => {
   // Manually add players & courts
   const addPlayer = () => setPlayers([...players, ""]);
   const addCourt = () => setCourts([...courts, `Bane ${courts.length + 1}`]);
-  const removeCourt = () => setCourts([...courts, `Bane ${courts.length - 1 }`]);
+  
+  const deleteCourt = (index: number) => {
+    const newCourts = courts.filter((_, i) => i !== index); // Remove court at index
+    setCourts(newCourts);
+    localStorage.setItem("courts", JSON.stringify(newCourts)); // Update localStorage
+  };
+  
 
   // Clear data function
   const clearData = () => {
     //setPlayers([""]);
-    setCourts(["Bane 1", "Bane 2"]);
+    setCourts(["Bane 1", "Bane 2", "Bane 3", "Bane 4"]);
     //localStorage.removeItem("players");
     localStorage.removeItem("courts");
     localStorage.removeItem("matchups");
@@ -119,25 +125,39 @@ useEffect(() => {
           </div>
 
           {/* Courts */}
-          <div>
+          <div className="flex-row justify-center mt-4">
             <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">Courts</h3>
             {courts.map((court, index) => (
-              <Input
-                key={`bane-${index}`}
-                label={`Bane ${index + 1}`}
-                name={`bane${index}`}
-                value={court}
-                onChange={(e) => handleCourtChange(index, e)}
-              />
+              <div key={`bane-${index}`} className="flex items-center space-x-2">
+                <Input
+                  label={`Bane ${index + 1}`}
+                  name={`bane${index}`}
+                  value={court}
+                  onChange={(e) => handleCourtChange(index, e)}
+                />
+                <div className="flex-row justify-center mt-6">
+                <button
+                  type="button"
+                  onClick={() => deleteCourt(index)} // Call deleteCourt with index
+                  className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
+                >
+                  X
+                </button>
+              </div>
+              </div>
             ))}
+            
+          
             <button
               type="button"
               onClick={addCourt}
-              className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 mt-4"
             >
               + Ny Bane
             </button>
-          </div>
+            </div>  
+          
+          
 
           {/* Submit Button */}
           <button
@@ -155,7 +175,15 @@ useEffect(() => {
           >
             Reset Data
           </button>
+          <button
+            type="button"
+            
+            className="mt-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+          >
+            Delete Court
+          </button>
         </form>
+        
       </Section>
     </Page>
   );

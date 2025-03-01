@@ -13,14 +13,14 @@ const withPWA = require("next-pwa")({
 	images: {
 	  unoptimized: true, // Required for GitHub Pages
 	},
-	basePath, // Use basePath variable
-	assetPrefix: basePath, // Use basePath for assets
+	basePath,
+	assetPrefix: isProd ? "/DartApp/" : "",
 	reactStrictMode: true,
 	trailingSlash: true, // Ensures GitHub Pages compatibility
 	swcMinify: true,
 	env: {
-	  NEXT_PUBLIC_BASE_PATH: basePath, // Make basePath available in the client
-	},
+		NEXT_PUBLIC_BASE_PATH: basePath, // Makes it available in the client
+	  },
   });
   
   module.exports = nextConfig;
