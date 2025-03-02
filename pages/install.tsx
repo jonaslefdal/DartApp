@@ -11,7 +11,6 @@ const InstallGuide = () => {
   const [isSafari, setIsSafari] = useState(false);
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-
   useEffect(() => {
     // Sjekk om appen kjører som en PWA
     setIsPWA(window.matchMedia("(display-mode: standalone)").matches);

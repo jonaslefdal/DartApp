@@ -21,15 +21,49 @@ const Matchups = () => {
   const [onBreak, setOnBreak] = useState<string[]>([]);
   const [players, setPlayers] = useState<string[]>([]);
   const [courts, setCourts] = useState<string[]>([]);
+  const [pastPairs, setPastPairs] = useState<string[][]>([]);
+
+  const [roundCount, setRoundCount] = useState<number>(0);
+
 
   useEffect(() => {
     setPlayers(JSON.parse(localStorage.getItem("players") || "[]"));
     setCourts(JSON.parse(localStorage.getItem("courts") || "[]"));
     setRounds(JSON.parse(localStorage.getItem("matchups") || "[]"));
     setOnBreak(JSON.parse(localStorage.getItem("onBreak") || "[]"));
-  }, []);
+    setPastPairs(JSON.parse(localStorage.getItem("pastPairs") || "[]"));
+
+  // Load the roundCount from localStorage if it exists
+  const storedRoundCount = localStorage.getItem("roundCount");
+  if (storedRoundCount) {
+    setRoundCount(parseInt(storedRoundCount, 10));
+  }
+}, []);
+
+// Helper function to compute repeated pairs from pastPairs
+const getRepeatedPairs = (pairs: string[][]): string[][] => {
+  const counts: { [key: string]: number } = {};
+  const pairMap: { [key: string]: string[] } = {};
+  pairs.forEach((pair) => {
+    // Sort so order doesn't matter
+    const sortedPair = [...pair].sort();
+    const key = sortedPair.join(" - ");
+    counts[key] = (counts[key] || 0) + 1;
+    pairMap[key] = sortedPair;
+  });
+  return Object.keys(counts)
+    .filter((key) => counts[key] > 1)
+    .map((key) => pairMap[key]);
+};
+
+// Compute the repeated pairs (if any)
+const repeatedPairs = getRepeatedPairs(pastPairs);
 
   const regenerateTeams = () => {
+    const newCount = roundCount + 1;
+    setRoundCount(newCount);
+    localStorage.setItem("roundCount", newCount.toString());
+
     if (players.length < 4) {
       alert("Not enough players to generate teams.");
       return;
@@ -37,11 +71,47 @@ const Matchups = () => {
     const { matchups, onBreak } = generateMatchups(players, courts);
     setRounds(matchups);
     setOnBreak(onBreak);
+
+    setPastPairs(JSON.parse(localStorage.getItem("pastPairs") || "[]"));
+
   };
 
   return (
     <Page>
       <Section>
+                
+                
+{/* Persistent Banner */}
+{roundCount > 6 && (
+          <div className="bg-red-500 text-white p-4 rounded-md mb-4">
+          <p className="text-center font-bold">
+              Etter over 7 runder kan spillere bli parret med de samme lagkameratene.
+            </p>
+            <p className="text-center">
+              Lag genereres med en metode som sjekker om to spillere har spilt sammen før.
+            </p>
+            {repeatedPairs.length > 0 && (
+              <p className="text-center mt-2">
+                Gjentatte par:{" "}
+                {repeatedPairs.map((pair, index) => (
+                  <span key={index}>
+                    {pair.join(" og ")}
+                    {index < repeatedPairs.length - 1 && ", "}
+                  </span>
+                ))}
+              </p>
+            )}
+            <div className="text-center mt-2">
+              <button
+                onClick={() => router.push("/story")}
+                className="px-4 py-2 bg-white text-red-500 font-semibold rounded-md hover:bg-red-100"
+              >
+                Nullstill økt
+              </button>
+            </div>
+          </div>
+        )}
+
         <h2 className="text-2xl font-bold text-center mb-6">Matchups</h2>
 
         {/* Matchups Display */}
@@ -113,12 +183,7 @@ const Matchups = () => {
         >
           Generer nytt spill
         </button>
-          <button
-            onClick={() => router.push("/")}
-            className="mt-6 px-6 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
-          >
-            Tilbake til personer
-          </button>
+
         </div>
       </Section>
     </Page>

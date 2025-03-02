@@ -5,10 +5,8 @@ import Input from "@/components/inputs";
 import { useRouter } from "next/router";
 import { generateMatchups } from "@/utils/teamGenerator";
 
-
 const Index = () => {
-	const router = useRouter();
-
+  const router = useRouter();
 
   type Match = {
     team1: string[];
@@ -18,45 +16,69 @@ const Index = () => {
     court: string;
     matches: Match[];
   };
-  
-const [players, setPlayers] = useState<string[]>([""]); // Default state
-const [courts, setCourts] = useState<string[]>(["Bane 1", "Bane 2", "Bane 3", "Bane 4"]);
-const [isLoaded, setIsLoaded] = useState(false); // Track if data is loaded
 
-// ✅ Load data from localStorage AFTER the component mounts (Client-side only)
-useEffect(() => {
-  const storedPlayers = localStorage.getItem("players");
-  const storedCourts = localStorage.getItem("courts");
+  // Manual input state for players
+  const [players, setPlayers] = useState<string[]>([""]);
+  const [courts, setCourts] = useState<string[]>([
+    "Bane 1",
+    "Bane 2",
+    "Bane 3",
+    "Bane 4",
+  ]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  if (storedPlayers) setPlayers(JSON.parse(storedPlayers));
-  if (storedCourts) setCourts(JSON.parse(storedCourts));
+  // Whether to show the predefined names panel
+  const [showDefaultNames, setShowDefaultNames] = useState(false);
 
-  setIsLoaded(true); // Mark that we have loaded data
-}, []);
+  // Hardcoded list of over 60 names
+  const defaultNames = [
+    "Alice", "Bob", "Charlie", "David", "Eva", "Frank", "Grace", "Hannah",
+    "Ivan", "Julia", "Kevin", "Laura", "Michael", "Nina", "Oliver", "Pam",
+    "Quincy", "Rachel", "Sam", "Tina", "Uma", "Victor", "Wendy", "Xander",
+    "Yvonne", "Zack", "Aaron", "Beth", "Carl", "Diana", "Ethan", "Fiona",
+    "George", "Helena", "Ian", "Jasmine", "Kyle", "Liam", "Mia", "Noah",
+    "Olivia", "Peter", "Queen", "Ralph", "Sophie", "Tom", "Ursula", "Violet",
+    "Walter", "Xenia", "Yosef", "Zoe", "Amber", "Brandon", "Catherine", "Derek",
+    "Elena", "Felix", "Gabrielle", "Henry", "Isabel", "Jack", "Katherine",
+    "Leon", "Marissa", "Nathan", "Ophelia"
+  ];
 
-// ✅ Save to localStorage when players or courts change
-useEffect(() => {
-  if (isLoaded) {
-    localStorage.setItem("players", JSON.stringify(players));
-  }
-}, [players, isLoaded]);
+  // Load data from localStorage on mount
+  useEffect(() => {
+    const storedPlayers = localStorage.getItem("players");
+    const storedCourts = localStorage.getItem("courts");
 
-useEffect(() => {
-  if (isLoaded) {
-    localStorage.setItem("courts", JSON.stringify(courts));
-  }
-}, [courts, isLoaded]);
+    if (storedPlayers) setPlayers(JSON.parse(storedPlayers));
+    if (storedCourts) setCourts(JSON.parse(storedCourts));
 
-  // Handle input changes
-  const handlePlayerChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    const newPlayers = [...players];
-    newPlayers[index] = e.target.value;
+    setIsLoaded(true);
+  }, []);
 
-    if (index === players.length - 1 && e.target.value.trim() !== "") {
-      newPlayers.push("");
+  // Save players and courts to localStorage when they change
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem("players", JSON.stringify(players));
     }
+  }, [players, isLoaded]);
 
-    setPlayers(newPlayers);
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem("courts", JSON.stringify(courts));
+    }
+  }, [courts, isLoaded]);
+
+  // Handle manual player input changes
+  const handlePlayerChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlayers((prevPlayers) => {
+      const updated = [...prevPlayers];
+      updated[index] = e.target.value;
+
+      // If the user types into the last field, add a new empty field
+      if (index === updated.length - 1 && e.target.value.trim() !== "") {
+        updated.push("");
+      }
+      return updated;
+    });
   };
 
   const handleCourtChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,42 +87,84 @@ useEffect(() => {
     setCourts(newCourts);
   };
 
-  // Manually add players & courts
-  const addPlayer = () => setPlayers([...players, ""]);
+  // Add an empty player line
+  const addPlayer = () => setPlayers((prev) => [...prev, ""]);
+
+  // Add a new court
   const addCourt = () => setCourts([...courts, `Bane ${courts.length + 1}`]);
-  
+
+  // Remove a court
   const deleteCourt = (index: number) => {
-    const newCourts = courts.filter((_, i) => i !== index); // Remove court at index
+    const newCourts = courts.filter((_, i) => i !== index);
     setCourts(newCourts);
-    localStorage.setItem("courts", JSON.stringify(newCourts)); // Update localStorage
+    localStorage.setItem("courts", JSON.stringify(newCourts));
   };
+
+  // Remove a player from the array
   const deletePlayer = (index: number) => {
-    const newPlayer = players.filter((_, i) => i !== index); // Remove player at index
-    setPlayers(newPlayer);
-    localStorage.setItem("players", JSON.stringify(newPlayer)); // Update localStorage
+    const newPlayers = players.filter((_, i) => i !== index);
+    setPlayers(newPlayers);
+    localStorage.setItem("players", JSON.stringify(newPlayers));
   };
 
-  // Clear data function
-  const clearData = () => {
-    //setPlayers([""]);
-    setCourts(["Bane 1", "Bane 2", "Bane 3", "Bane 4"]);
-    //localStorage.removeItem("players");
-    localStorage.removeItem("courts");
-    localStorage.removeItem("matchups");
-    localStorage.removeItem("onBreak");
-    localStorage.removeItem("pastTeams");
-    localStorage.removeItem("pastPairs");
-    localStorage.removeItem("pastBreaks");
-    localStorage.removeItem("breakCounts");
+  // Toggle a predefined name in/out of the players array
+  const toggleDefaultName = (name: string) => {
+    setPlayers((prevPlayers) => {
+      let updated = [...prevPlayers];
+
+      // Remove trailing empty field if present
+      if (updated.length && !updated[updated.length - 1].trim()) {
+        updated.pop();
+      }
+
+      // If the name is already in players, remove it. Otherwise, add it.
+      if (updated.includes(name)) {
+        updated = updated.filter((p) => p !== name);
+      } else {
+        updated.push(name);
+      }
+
+      // Re-add an empty field at the end for manual entry
+      updated.push("");
+
+      return updated;
+    });
   };
 
+  // Check if a name is in the players array (for button color)
+  const isNameSelected = (name: string) => {
+    // ignoring trailing empty field if present
+    const validPlayers = players.filter((p) => p.trim() !== "");
+    return validPlayers.includes(name);
+  };
+
+  // Toggle showing/hiding the predefined names panel
+  const toggleDefaultNamesPanel = () => {
+    setShowDefaultNames((prev) => !prev);
+  };
+
+  // 1. Define a function to remove all players
+  const removeAllPlayers = () => {
+  setPlayers([""]);  // Reset to just an empty input
+  localStorage.setItem("players", JSON.stringify([""]));
+  };
+
+  // On submit, increment the round count and generate teams from players
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Increment round count
+    const storedRoundCount = localStorage.getItem("roundCount");
+    let currentRoundCount = storedRoundCount ? parseInt(storedRoundCount, 10) : 0;
+    currentRoundCount += 1;
+    localStorage.setItem("roundCount", currentRoundCount.toString());
 
-    const { matchups, onBreak } = generateMatchups(players, courts);
+    // Filter out any empty strings from the players array
+    const finalPlayers = players.filter((p) => p.trim() !== "");
+
+    const { matchups, onBreak } = generateMatchups(finalPlayers, courts);
     router.push("/matchups");
   };
-  
+
   return (
     <Page>
       <Section>
@@ -109,95 +173,127 @@ useEffect(() => {
         </h2>
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-6">
-          {/* Players */}
+         {/* Manual Player Input */}
           <div>
-          <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">Spillere</h3>
-          {players.map((player, index) => (
-            <div key={`spiller-${index}`} className="flex items-center space-x-2 w-full">
-            {/* Wrap the Input in a flex-1 container so it takes the full width */}
-            <div className="flex-1">
-              <Input
-                label={`Spiller ${index + 1}`}
-                name={`spiller${index}`}
-                value={player}
-                onChange={(e) => handlePlayerChange(index, e)}
-              />
+            <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">
+              Spillere
+            </h3>
+            {/* Wrap the players list in a scrollable container */}
+            <div className="max-h-80 overflow-y-auto">
+              {players.map((player, index) => (
+                <div key={`spiller-${index}`} className="flex items-center space-x-2 w-full">
+                  <div className="flex-1">
+                    <Input
+                      label={`Spiller ${index + 1}`}
+                      name={`spiller${index}`}
+                      value={player}
+                      onChange={(e) => handlePlayerChange(index, e)}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => deletePlayer(index)}
+                    className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 mt-6"
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
             </div>
+            <div className="flex gap-2 mt-2">
+              <button
+                type="button"
+                onClick={addPlayer}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              >
+                + Ny Spiller
+              </button>
+              <button
+                type="button"
+                onClick={removeAllPlayers}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              >
+                Fjern alle spillere
+              </button>
+            </div>
+          </div>
+
+
+          {/* Predefined Names Panel */}
+          <div className="mt-4">
             <button
               type="button"
-              onClick={() => deletePlayer(index)}
-              className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 mt-6"
+              onClick={toggleDefaultNamesPanel}
+              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
             >
-              X
+              {showDefaultNames ? "Skjul forhåndsdefinerte navn" : "Vis forhåndsdefinerte navn"}
             </button>
-          </div>
-          
-          ))}
-          <button
-            type="button"
-            onClick={addPlayer}
-            className="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-          >
-            + Ny Spiller
-          </button>
-        </div>
 
+            {showDefaultNames && (
+              <div className="mt-2 max-h-60 overflow-y-auto border p-2 rounded">
+                <div className="flex flex-wrap gap-2">
+                  {defaultNames.map((name) => (
+                    <button
+                      key={name}
+                      type="button"
+                      onClick={() => toggleDefaultName(name)}
+                      className={`px-3 py-1 text-white rounded-md 
+                      transition-colors duration-200
+                      ${isNameSelected(name) ? "bg-green-500" : "bg-red-500"} 
+                      hover:${isNameSelected(name) ? "bg-green-600" : "bg-red-600"}`}
+                    >
+                      {name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Courts */}
           <div className="flex-row justify-center mt-4">
-            <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">Courts</h3>
+            <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">
+              Courts
+            </h3>
             {courts.map((court, index) => (
-            <div key={`bane-${index}`} className="flex items-center space-x-2">
-              <Input
-                label={`Bane ${index + 1}`}
-                name={`bane${index}`}
-                value={court}
-                onChange={(e) => handleCourtChange(index, e)}
-              />
-              {/* Only show delete button for the last court */}
-              {index === courts.length - 1 && (
-                <button
-                  type="button"
-                  onClick={() => deleteCourt(index)}
-                  className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 mt-6"
-                >
-                  X
-                </button>
-              )}
-            </div>
-          ))}
-
-            
-          
+              <div key={`bane-${index}`} className="flex items-center space-x-2">
+                <Input
+                  label={`Bane ${index + 1}`}
+                  name={`bane${index}`}
+                  value={court}
+                  onChange={(e) => handleCourtChange(index, e)}
+                />
+                {/* Only show delete button for the last court */}
+                {index === courts.length - 1 && (
+                  <button
+                    type="button"
+                    onClick={() => deleteCourt(index)}
+                    className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 mt-6"
+                  >
+                    X
+                  </button>
+                )}
+              </div>
+            ))}
             <button
               type="button"
               onClick={addCourt}
-              className="px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 mt-4"
+              className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
             >
               + Ny Bane
             </button>
-            </div>  
-          
-          
+          </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="mt-4 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
-          >
-            Submit
-          </button>
-
-          {/* Reset Data Button */}
-          <button
-            type="button"
-            onClick={clearData}
-            className="mt-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-          >
-            Reset Data
-          </button>
+          <div className="flex justify-center mt-4">
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="flex-center mt-4 px-5 py-3 bg-green-500 text-white rounded-md hover:bg-green-600"
+            >
+              Generer Lag
+            </button>
+          </div>
         </form>
-        
       </Section>
     </Page>
   );
