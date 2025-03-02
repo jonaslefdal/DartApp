@@ -74,7 +74,11 @@ useEffect(() => {
     setCourts(newCourts);
     localStorage.setItem("courts", JSON.stringify(newCourts)); // Update localStorage
   };
-  
+  const deletePlayer = (index: number) => {
+    const newPlayer = players.filter((_, i) => i !== index); // Remove player at index
+    setPlayers(newPlayer);
+    localStorage.setItem("players", JSON.stringify(newPlayer)); // Update localStorage
+  };
 
   // Clear data function
   const clearData = () => {
@@ -86,6 +90,8 @@ useEffect(() => {
     localStorage.removeItem("onBreak");
     localStorage.removeItem("pastTeams");
     localStorage.removeItem("pastPairs");
+    localStorage.removeItem("pastBreaks");
+    localStorage.removeItem("breakCounts");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -105,47 +111,62 @@ useEffect(() => {
         <form onSubmit={handleSubmit} className="mt-4 space-y-6">
           {/* Players */}
           <div>
-            <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">Spillere</h3>
-            {players.map((player, index) => (
+          <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">Spillere</h3>
+          {players.map((player, index) => (
+            <div key={`spiller-${index}`} className="flex items-center space-x-2 w-full">
+            {/* Wrap the Input in a flex-1 container so it takes the full width */}
+            <div className="flex-1">
               <Input
-                key={`spiller-${index}`}
                 label={`Spiller ${index + 1}`}
                 name={`spiller${index}`}
                 value={player}
                 onChange={(e) => handlePlayerChange(index, e)}
               />
-            ))}
+            </div>
             <button
               type="button"
-              onClick={addPlayer}
-              className="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+              onClick={() => deletePlayer(index)}
+              className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 mt-6"
             >
-              + Ny Spiller
+              X
             </button>
           </div>
+          
+          ))}
+          <button
+            type="button"
+            onClick={addPlayer}
+            className="mt-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+          >
+            + Ny Spiller
+          </button>
+        </div>
+
 
           {/* Courts */}
           <div className="flex-row justify-center mt-4">
             <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">Courts</h3>
             {courts.map((court, index) => (
-              <div key={`bane-${index}`} className="flex items-center space-x-2">
-                <Input
-                  label={`Bane ${index + 1}`}
-                  name={`bane${index}`}
-                  value={court}
-                  onChange={(e) => handleCourtChange(index, e)}
-                />
-                <div className="flex-row justify-center mt-6">
+            <div key={`bane-${index}`} className="flex items-center space-x-2">
+              <Input
+                label={`Bane ${index + 1}`}
+                name={`bane${index}`}
+                value={court}
+                onChange={(e) => handleCourtChange(index, e)}
+              />
+              {/* Only show delete button for the last court */}
+              {index === courts.length - 1 && (
                 <button
                   type="button"
-                  onClick={() => deleteCourt(index)} // Call deleteCourt with index
-                  className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
+                  onClick={() => deleteCourt(index)}
+                  className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 mt-6"
                 >
                   X
                 </button>
-              </div>
-              </div>
-            ))}
+              )}
+            </div>
+          ))}
+
             
           
             <button
