@@ -31,17 +31,61 @@ const Index = () => {
   const [showDefaultNames, setShowDefaultNames] = useState(false);
 
   // Hardcoded list of over 60 names
-  const defaultNames = [
-    "Alice", "Bob", "Charlie", "David", "Eva", "Frank", "Grace", "Hannah",
-    "Ivan", "Julia", "Kevin", "Laura", "Michael", "Nina", "Oliver", "Pam",
-    "Quincy", "Rachel", "Sam", "Tina", "Uma", "Victor", "Wendy", "Xander",
-    "Yvonne", "Zack", "Aaron", "Beth", "Carl", "Diana", "Ethan", "Fiona",
-    "George", "Helena", "Ian", "Jasmine", "Kyle", "Liam", "Mia", "Noah",
-    "Olivia", "Peter", "Queen", "Ralph", "Sophie", "Tom", "Ursula", "Violet",
-    "Walter", "Xenia", "Yosef", "Zoe", "Amber", "Brandon", "Catherine", "Derek",
-    "Elena", "Felix", "Gabrielle", "Henry", "Isabel", "Jack", "Katherine",
-    "Leon", "Marissa", "Nathan", "Ophelia"
-  ];
+// Replace your existing defaultNames array with these names:
+const defaultNames = [
+  "Adrian Vevatne",
+  "Andreas Klausen",
+  "Ane Hernæs",
+  "Benjamin Baxter",
+  "Charlotte Boe",
+  "Daan van Heerebeek",
+  "Eline Furuseth",
+  "Ella Espe",
+  "Emilie Fjeldheim",
+  "Erik Risa",
+  "Erlend Falkeid",
+  "Erlend Gjesdal",
+  "Even Harjo Bakke",
+  "Halvard Kvinge",
+  "Henrik Torgersen",
+  "Ingrid Vestal",
+  "Joachim Lambine",
+  "Jonas Ericsson",
+  "Jonas Lefdal",
+  "Julian Haarberg",
+  "Kasper Borgen",
+  "Katinka Westli",
+  "Kristine Høgnes",
+  "Lotte Dovland",
+  "Mads Ancher Grøn",
+  "Magnus Ytterbø",
+  "Magnus Støfring",
+  "Marius Winge",
+  "Mats Bender Schøyen",
+  "Mats Raustøl",
+  "Nicklas Holm Andersen",
+  "Nils Anders Kjærefjord",
+  "Olav Andre Brekke",
+  "Olav Zahl Nyrnes",
+  "Ole Bosåen",
+  "Oliver Falck Heng",
+  "Philip Løvås",
+  "Rikke Kampenes",
+  "Selma Holme",
+  "Simen Brauti",
+  "Simen Tandberg",
+  "Sondre Evjen",
+  "Sondre Håland",
+  "Stian Viken",
+  "Tea Johansen",
+  "Thomas Sandmo",
+  "Thomas Fjermestad",
+  "Tora",
+  "Tobias Reitan",
+  "Truls Fikseaunet",
+  "Ulrikke Dietz",
+  "Vegard Omnes Rike"
+].sort(); // 👈 Sort alphabetically
 
   // Load data from localStorage on mount
   useEffect(() => {
