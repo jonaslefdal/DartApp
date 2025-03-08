@@ -40,7 +40,6 @@ const defaultNames = [
   "Ane Hernæs",
   "Benjamin Baxter",
   "Charlotte Boe",
-  "Daan van Heerebeek",
   "Eline Furuseth",
   "Ella Espe",
   "Emilie Fjeldheim",
@@ -50,7 +49,7 @@ const defaultNames = [
   "Even Harjo Bakke",
   "Halvard Kvinge",
   "Henrik Torgersen",
-  "Ingrid Vestal",
+  "Ingrid Vestad",
   "Joachim Lambine",
   "Jonas Ericsson",
   "Jonas Lefdal",
@@ -86,7 +85,8 @@ const defaultNames = [
   "Tobias Reitan",
   "Truls Fikseaunet",
   "Ulrikke Dietz",
-  "Vegard Omnes Rike"
+  "Vegard Omnes Rike",
+  "Morten Gumpen"
 ].sort();
 
   // Load data from localStorage on mount
@@ -121,16 +121,16 @@ const defaultNames = [
 const modalRef = useRef<HTMLDivElement>(null);
 
 useEffect(() => {
-  if (showDefaultNames && modalRef.current) {
-    disableBodyScroll(modalRef.current);
+  if (showDefaultNames) {
+    disableBodyScroll(document.body);
   } else {
-    // If the modal is not rendered, clear all locks.
-    clearAllBodyScrollLocks();
+    enableBodyScroll(document.body);
   }
   return () => {
-    clearAllBodyScrollLocks();
+    enableBodyScroll(document.body);
   };
 }, [showDefaultNames]);
+
 
   
 
