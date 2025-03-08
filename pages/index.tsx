@@ -322,7 +322,7 @@ function checkAndPromptReset() {
 
             {showDefaultNames && (
     <div
-      className="fixed inset-0 bg-white text-black bg-opacity-20 flex items-center justify-center sm:pt-10 pt-safe px-safe scrollbar-hide"
+      className="fixed inset-0 bg-white text-black bg-opacity-20 flex items-center justify-center pt-safe pb-safe px-safe scrollbar-hide"
       onClick={() => setShowDefaultNames(false)}
     >
       <div
