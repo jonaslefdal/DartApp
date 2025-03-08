@@ -124,7 +124,7 @@ function checkAndPromptReset() {
   };
 
   return (
-    <div className="overflow-y-auto sm:scrollbar-hide">
+    <div className="overflow-y-auto scrollbar-hide">
 
     <Page>
       <Section>

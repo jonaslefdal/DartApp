@@ -114,6 +114,19 @@ const defaultNames = [
   useEffect(() => {
     checkAndPromptReset();
   }, []);
+
+
+useEffect(() => {
+  if (showDefaultNames) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [showDefaultNames]);
+
   
 
   // Handle manual player input changes
@@ -313,7 +326,7 @@ function checkAndPromptReset() {
       onClick={() => setShowDefaultNames(false)}
     >
       <div
-        className="relative w-[90vw] h-[75vh] max-w-[550px] max-h-[80vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900 sm:scrollbar-hide"
+        className="relative mt-2 w-[90vw] h-[75] max-w-[550px] max-h-[80vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900 sm:scrollbar-hide"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Sticky container with no height and pointer-events disabled */}
