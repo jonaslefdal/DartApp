@@ -46,20 +46,10 @@ html.plt-ios.plt-pwa {
 body::-webkit-scrollbar {
   display: none;
 }
-body {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+
+html, body {
+  overflow: -moz-scrollbars-none; /* For older Firefox */
+  -ms-overflow-style: none; /* For IE and Edge */
+  scrollbar-width: none; /* For modern Firefox */
 }
 
-
-.wrapper {
-  height: 100vh;         /* Fixed height for the viewport */
-  overflow: hidden;      /* Hide the native scrollbar */
-}
-
-.scrollable {
-  height: calc(100vh + 20px); /* Increase height by, say, 20px */
-  padding-bottom: 20px;       /* Add matching padding */
-  overflow-y: auto;           /* Allow scrolling */
-  -webkit-overflow-scrolling: touch;
-}
