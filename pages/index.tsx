@@ -6,7 +6,8 @@ import Input from "@/components/inputs";
 import { useRouter } from "next/router";
 import { generateMatchups } from "@/utils/teamGenerator";
 import ReactModal from 'react-modal'
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+
 
 const Index = () => {
   const router = useRouter();
@@ -216,6 +217,9 @@ const defaultNames = [
     router.push("/matchups");
   };
 
+  const modalContentRef = useRef<HTMLDivElement>(null);
+
+
   // Helper function to prompt for resetting data
 function checkAndPromptReset() {
   const currentSessionDate = new Date().toDateString();
@@ -244,6 +248,33 @@ function checkAndPromptReset() {
     localStorage.setItem("sessionDate", currentSessionDate);
   }
 }
+
+
+useEffect(() => {
+  const handleScroll = () => {
+    document.documentElement.style.setProperty('--scroll-y', `${window.scrollY}px`);
+  };
+  window.addEventListener('scroll', handleScroll);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+
+
+const openModal = () => {
+  const scrollY = document.documentElement.style.getPropertyValue('--scroll-y');
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${scrollY}`;
+  setShowDefaultNames(true);
+};
+
+const closeModal = () => {
+  const scrollY = document.body.style.top;
+  document.body.style.position = '';
+  document.body.style.top = '';
+  window.scrollTo(0, parseInt(scrollY || '0') * -1);
+  setShowDefaultNames(false);
+};
+
+
 
   return (
     <Page>
@@ -299,50 +330,57 @@ function checkAndPromptReset() {
           </div>
 
 
-          {/* Predefined Names Panel */}
-          <div className="mt-4">
-            <button
-              type="button"
-              onClick={toggleDefaultNamesPanel}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
-            >
-              {showDefaultNames ? "Skjul forhåndsdefinerte navn" : "Vis forhåndsdefinerte navn"}
-            </button>
-
-            <ReactModal
-  isOpen={showDefaultNames}
-  onRequestClose={() => setShowDefaultNames(false)}
-  overlayClassName="fixed inset-0 bg-white bg-opacity-20 flex items-center justify-center pt-safe pb-safe px-safe"
-  className="relative mt-5 mb-4 w-[90vw] max-w-[550px] max-h-[75vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900"
->
-  {/* The same content that was inside your manual overlay */}
+{/* Predefined Names Panel */}
+<div className="mt-4">
   <button
-    onClick={() => setShowDefaultNames(false)}
-    className="pointer-events-auto absolute top-2 right-2 px-3 py-1 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+    type="button"
+    onClick={openModal}
+    className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
   >
-    X
+    {showDefaultNames ? "Skjul forhåndsdefinerte navn" : "Vis forhåndsdefinerte navn"}
   </button>
 
-  <div className="flex flex-wrap gap-2 mt-2">
-    {defaultNames.map((name) => (
-      <button
-        key={name}
-        type="button"
-        onClick={() => toggleDefaultName(name)}
-        className={`
-          px-3 py-1 text-white rounded-md 
-          transition-colors duration-200
-          ${isNameSelected(name) ? "bg-green-500" : "bg-red-500"}
-          hover:${isNameSelected(name) ? "bg-green-600" : "bg-red-600"}
-        `}
+  {showDefaultNames && (
+    <div
+      id="dialog"
+      className="fixed inset-0 bg-white bg-opacity-20 flex items-center justify-center pt-safe pb-safe px-safe z-50"
+      // Clicking outside will close the modal
+      onClick={closeModal}
+    >
+      <div
+        className="relative mt-5 mb-4 w-[90vw] max-w-[550px] h-[75vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900"
+        style={{ WebkitOverflowScrolling: 'touch' }}
+        onClick={(e) => e.stopPropagation()}  // Prevent closing when clicking inside the modal
       >
-        {name}
-      </button>
-    ))}
-  </div>
-</ReactModal>
-
+        <button
+          onClick={closeModal}
+          className="pointer-events-auto absolute top-2 right-2 px-3 py-1 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+        >
+          X
+        </button>
+        <div className="flex flex-wrap gap-2 mt-2">
+          {defaultNames.map((name) => (
+            <button
+              key={name}
+              type="button"
+              onClick={() => toggleDefaultName(name)}
+              className={`
+                px-3 py-1 text-white rounded-md 
+                transition-colors duration-200
+                ${isNameSelected(name) ? "bg-green-500" : "bg-red-500"}
+                hover:${isNameSelected(name) ? "bg-green-600" : "bg-red-600"}
+              `}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )}
 </div>
+
+
 
           {/* Courts */}
           <div className="flex-row justify-center mt-4">
