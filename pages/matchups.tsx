@@ -124,6 +124,8 @@ function checkAndPromptReset() {
   };
 
   return (
+    <div className="overflow-y-auto sm:scrollbar-hide">
+
     <Page>
       <Section>
         {/* Center the entire content and limit max width */}
@@ -257,7 +259,9 @@ function checkAndPromptReset() {
         </div>
       </Section>
     </Page>
+    </div>
   );
 };
+
 
 export default Matchups;

@@ -313,7 +313,7 @@ function checkAndPromptReset() {
       onClick={() => setShowDefaultNames(false)}
     >
       <div
-        className="relative w-[90vw] h-[90vh] max-w-[550px] max-h-[80vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900"
+        className="relative w-[90vw] h-[75vh] max-w-[550px] max-h-[80vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900 sm:scrollbar-hide"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Sticky container with no height and pointer-events disabled */}
