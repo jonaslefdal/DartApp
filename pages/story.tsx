@@ -23,13 +23,16 @@ const Story = () => {
 		const defaultCourts = ["Bane 1", "Bane 2", "Bane 3", "Bane 4"];
 		setCourts(defaultCourts);
 		localStorage.setItem("courts", JSON.stringify(defaultCourts));
+		localStorage.setItem("sessionDate", JSON.stringify("Sat Mar 07 2025"));
 		localStorage.removeItem("matchups");
 		localStorage.removeItem("onBreak");
 		localStorage.removeItem("pastTeams");
 		localStorage.removeItem("pastPairs");
+		localStorage.removeItem("lastRoundPlayers");
 		localStorage.removeItem("pastBreaks");
 		localStorage.removeItem("breakCounts");
 		localStorage.removeItem("roundCount");
+		localStorage.removeItem("currentCount");
 	  };
 	  
 

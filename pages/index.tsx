@@ -85,7 +85,7 @@ const defaultNames = [
   "Truls Fikseaunet",
   "Ulrikke Dietz",
   "Vegard Omnes Rike"
-].sort(); // 👈 Sort alphabetically
+].sort();
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -110,6 +110,11 @@ const defaultNames = [
       localStorage.setItem("courts", JSON.stringify(courts));
     }
   }, [courts, isLoaded]);
+
+  useEffect(() => {
+    checkAndPromptReset();
+  }, []);
+  
 
   // Handle manual player input changes
   const handlePlayerChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -208,6 +213,35 @@ const defaultNames = [
     const { matchups, onBreak } = generateMatchups(finalPlayers, courts);
     router.push("/matchups");
   };
+
+  // Helper function to prompt for resetting data
+function checkAndPromptReset() {
+  const currentSessionDate = new Date().toDateString();
+  const storedSessionDate = localStorage.getItem("sessionDate");
+
+  if (storedSessionDate !== currentSessionDate) {
+    // Mobile-friendly prompt
+    const shouldReset = window.confirm(
+      "It's a new day since your last matchup. Would you like to reset pairing data?"
+    );
+
+    if (shouldReset) {
+      localStorage.setItem("courts", JSON.stringify(["Bane 1", "Bane 2", "Bane 3", "Bane 4"]));
+      localStorage.removeItem("matchups");
+      localStorage.removeItem("onBreak");
+      localStorage.removeItem("pastTeams");
+      localStorage.removeItem("pastPairs");
+      localStorage.removeItem("lastRoundPlayers");
+      localStorage.removeItem("pastBreaks");
+      localStorage.removeItem("breakCounts");
+      localStorage.removeItem("roundCount");
+      localStorage.removeItem("currentCount");
+      console.log("Pairing data has been reset.");
+    }
+    // In either case, update the session date to current
+    localStorage.setItem("sessionDate", currentSessionDate);
+  }
+}
 
   return (
     <Page>

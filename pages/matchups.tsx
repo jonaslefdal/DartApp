@@ -43,6 +43,41 @@ const Matchups = () => {
     }
   }, []);
 
+  useEffect(() => {
+    checkAndPromptReset();
+  }, []);
+
+
+    // Helper function to prompt for resetting data
+function checkAndPromptReset() {
+  const currentSessionDate = new Date().toDateString();
+  const storedSessionDate = localStorage.getItem("sessionDate");
+
+  if (storedSessionDate !== currentSessionDate) {
+    // Mobile-friendly prompt
+    const shouldReset = window.confirm(
+      "It's a new day since your last matchup. Would you like to reset pairing data?"
+    );
+
+    if (shouldReset) {
+      localStorage.setItem("courts", JSON.stringify(["Bane 1", "Bane 2", "Bane 3", "Bane 4"]));
+      localStorage.removeItem("matchups");
+      localStorage.removeItem("onBreak");
+      localStorage.removeItem("pastTeams");
+      localStorage.removeItem("pastPairs");
+      localStorage.removeItem("lastRoundPlayers");
+      localStorage.removeItem("pastBreaks");
+      localStorage.removeItem("breakCounts");
+      localStorage.removeItem("roundCount");
+      localStorage.removeItem("currentCount");
+      console.log("Pairing data has been reset.");
+    }
+    // In either case, update the session date to current
+    localStorage.setItem("sessionDate", currentSessionDate);
+  }
+}
+  
+
   // Mark a winner (left or right) for a match
   const handleWin = (roundIndex: number, matchIndex: number, side: "left" | "right") => {
     const matchKey = `${roundIndex}-${matchIndex}`;
@@ -93,23 +128,11 @@ const Matchups = () => {
       <Section>
         {/* Center the entire content and limit max width */}
         <div className="max-w-md mx-auto space-y-6">
-          {roundCount > 6 && (
+          {roundCount > 9 && (
             <div className="bg-red-500 text-white p-4 rounded-md">
               <p className="text-center font-bold">
-                Etter over 7 runder kan spillere bli parret med de samme lagkameratene.
+                Hei! Du har spilt over 10 runder. Er det på tide å resette?
               </p>
-              
-              {repeatedPairs.length > 0 && (
-                <p className="text-center mt-2">
-                  Gjentatte par:{" "}
-                  {repeatedPairs.map((pair, index) => (
-                    <span key={index}>
-                      {pair.join(" og ")}
-                      {index < repeatedPairs.length - 1 && ", "}
-                    </span>
-                  ))}
-                </p>
-              )}
               <div className="text-center mt-2">
                 <button
                   onClick={() => router.push("/story")}
