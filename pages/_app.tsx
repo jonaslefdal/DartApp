@@ -29,13 +29,19 @@ export default function App({ Component, pageProps }: AppProps) {
         .then(() => console.log("✅ Service Worker Registered"))
         .catch((err) => console.error("❌ Service Worker Registration Failed:", err));
     }
-    // Check if the app is already running in PWA mode
-    const isPWA = window.matchMedia("(display-mode: standalone)").matches;
-    if (isPWA) return;
-    
+
     ReactModal.setAppElement('#__next');
 
-
+    // Check if the app is already running in PWA mode
+    const isPWA = window.matchMedia("(display-mode: standalone)").matches;
+    if (isPWA) {
+      // Use the safe-area inset for the bottom (if available)
+      document.documentElement.style.setProperty('--bottom-offset', 'env(safe-area-inset-bottom)');
+      return;
+    } else {
+      document.documentElement.style.setProperty('--bottom-offset', '0px');
+    }
+      
     // Detect if the user is in Safari
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isSafari = userAgent.includes("safari") && !userAgent.includes("chrome");
@@ -48,12 +54,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange>
-    <div
-      className="no-scrollbar overflow-y-auto customScroll"
-      style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
-    >
-      <Component {...pageProps} />
-    </div>
-  </ThemeProvider>
+      <div
+        className="no-scrollbar overflow-y-auto full-height customScroll"
+      >
+        <Component {...pageProps} />
+      </div>
+    </ThemeProvider>
   );
 }
