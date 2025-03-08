@@ -334,32 +334,42 @@ const closeModal = () => {
     id="dialog"
     className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-2 py-4 overflow-auto"
     onClick={closeModal}
+    onMouseDown={closeModal}
+    onTouchStart={closeModal}
   >
     <div
       className="relative bg-zinc-900 rounded-lg shadow-xl p-4 w-full max-w-md max-h-[90vh] overflow-y-auto"
       onClick={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
     >
       <button
         onClick={closeModal}
-        className="absolute top-2 right-2 px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700"
-      >
+        className="sticky top-2 float-right px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700 z-50"
+        >
         X
       </button>
-      <div className="flex flex-wrap gap-2 mt-6">
-        {defaultNames.map((name) => (
-          <button
-            key={name}
-            type="button"
-            onClick={() => toggleDefaultName(name)}
-            className={`
-              px-3 py-1 rounded-md text-white transition-colors duration-200
-              ${isNameSelected(name) ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"}
-            `}
-          >
-            {name}
-          </button>
-        ))}
-      </div>
+
+      <div className="grid grid-cols-2 gap-2 mt-9">
+  {defaultNames.map((name) => (
+    <button
+      key={name}
+      type="button"
+      onClick={() => toggleDefaultName(name)}
+      className={`
+        py-2 px-3 rounded-lg text-sm font-medium transition-all duration-150
+        ${isNameSelected(name) 
+          ? "bg-green-500 text-white shadow-md"
+          : "bg-red-500 text-white shadow-md"}
+        active:scale-95
+        hover:brightness-110
+      `}
+    >
+      {name}
+    </button>
+  ))}
+</div>
+
     </div>
   </div>
 )}

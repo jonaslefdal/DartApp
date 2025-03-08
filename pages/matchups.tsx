@@ -148,7 +148,14 @@ function checkAndPromptReset() {
           <h2 className="text-2xl font-bold text-center">Matchups</h2>
 
           {rounds.length > 0 ? (
-            rounds.map((round, roundIndex) => (
+            rounds
+              .slice()
+              .sort((a, b) => {
+                const getIndex = (court: string) => Number(court.match(/\d+/)?.[0]) || 0;
+                return getIndex(a.court) - getIndex(b.court);
+              })
+              .map((round, roundIndex) => (
+
               <div
                 key={roundIndex}
                 className="bg-gray-800 p-4 rounded-lg shadow-lg space-y-4"
