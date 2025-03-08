@@ -54,5 +54,3 @@ body.modal-open {
     height: calc(var(--vh, 1vh) * 100 - var(--bottom-offset, 0px));
     padding-bottom: var(--bottom-offset, 0px);
   }
-  
-  
