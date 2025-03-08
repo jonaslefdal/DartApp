@@ -12,7 +12,7 @@ body {
 }
 
 body.modal-open {
-	height: 100%;            /* REMOVE */
+	height: 100%;
   overflow: hidden;
   -webkit-overflow-scrolling: none;
   overscroll-behavior: none;
@@ -20,9 +20,22 @@ body.modal-open {
 }
 
 .touch-none {
-	touch-action: none; /* REMOVE THIS */
+	touch-action: none; 
   }
   
   .overscroll-contain {
-	overscroll-behavior: none; /* Remove this as well */
+	overscroll-behavior: none; 
   }
+
+  @layer utilities {
+    /* Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+}
+  

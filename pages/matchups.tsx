@@ -5,7 +5,6 @@ import Section from "@/components/section";
 import { generateMatchups } from "@/utils/teamGenerator";
 
 
-
 type Match = {
   team1: string[];
   team2: string[];
@@ -125,10 +124,10 @@ function checkAndPromptReset() {
   };
 
   return (
-    <Page>
+<Page>
       <Section>
         {/* Center the entire content and limit max width */}
-        <div className="max-w-md mx-auto space-y-6">
+        <div className="max-w-md mx-auto space-y-6 no-scrollbar overflow-y-auto">
           {roundCount > 9 && (
             <div className="bg-red-500 text-white p-4 rounded-md">
               <p className="text-center font-bold">
@@ -264,8 +263,8 @@ function checkAndPromptReset() {
           </div>
         </div>
       </Section>
-    </Page>
-  );
+  </Page>
+ );
 };
 
 

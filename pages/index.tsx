@@ -277,7 +277,7 @@ const closeModal = () => {
               Spillere
             </h3>
             {/* Wrap the players list in a scrollable container */}
-            <div className="max-h-80 overflow-y-auto">
+            <div className="max-h-80 no-scrollbar overflow-y-auto">
               {players.map((player, index) => (
                 <div key={`spiller-${index}`} className="flex items-center space-x-2 w-full">
                   <div className="flex-1">
@@ -335,7 +335,7 @@ const closeModal = () => {
   >
     <div
       ref={modalRef}
-      className="relative bg-zinc-900 rounded-lg shadow-xl p-4 w-full max-w-md max-h-[90vh] overflow-y-auto overscroll-contain"
+      className="relative bg-zinc-900 rounded-lg shadow-xl p-4 w-full max-w-md max-h-[90vh] no-scrollbar overflow-y-auto overscroll-contain"
       onClick={(e) => e.stopPropagation()}
     >
       <button

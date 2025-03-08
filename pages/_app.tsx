@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
       navigator.serviceWorker.getRegistrations().then((registrations) => {
         registrations.forEach((reg) => reg.unregister()); // Remove old SW
-      });
+      }); 
 
       navigator.serviceWorker
         .register(swPath)
@@ -38,7 +38,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange>
+      <div className="no-scrollbar overflow-y-auto h-screen">
       <Component {...pageProps} />
+      </div>
     </ThemeProvider>
   );
 }
