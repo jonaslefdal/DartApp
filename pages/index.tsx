@@ -4,6 +4,8 @@ import Section from "@/components/section";
 import Input from "@/components/inputs";
 import { useRouter } from "next/router";
 import { generateMatchups } from "@/utils/teamGenerator";
+import { useRef } from "react";
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
 
 const Index = () => {
   const router = useRouter();
@@ -116,14 +118,17 @@ const defaultNames = [
   }, []);
 
 
+const modalRef = useRef<HTMLDivElement>(null);
+
 useEffect(() => {
-  if (showDefaultNames) {
-    document.body.style.overflow = "hidden";
+  if (showDefaultNames && modalRef.current) {
+    disableBodyScroll(modalRef.current);
   } else {
-    document.body.style.overflow = "";
+    // If the modal is not rendered, clear all locks.
+    clearAllBodyScrollLocks();
   }
   return () => {
-    document.body.style.overflow = "";
+    clearAllBodyScrollLocks();
   };
 }, [showDefaultNames]);
 
@@ -321,14 +326,15 @@ function checkAndPromptReset() {
             </button>
 
             {showDefaultNames && (
+  <div
+    ref={modalRef}
+    className="fixed inset-0 bg-white bg-opacity-20 flex items-center justify-center pt-safe pb-safe px-safe scrollbar-hide"
+    onClick={() => setShowDefaultNames(false)}
+  >
     <div
-      className="fixed inset-0 bg-white text-black bg-opacity-20 flex items-center justify-center pt-safe pb-safe px-safe scrollbar-hide"
-      onClick={() => setShowDefaultNames(false)}
+      className="relative mt-5 mb-4 w-[90vw] max-w-[550px] max-h-[75vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900"
+      onClick={(e) => e.stopPropagation()}
     >
-      <div
-        className="relative mt-5 mb-4 w-[90vw] max-w-[550px] max-h-[75vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900"
-        onClick={(e) => e.stopPropagation()}
-      >
         {/* Sticky container with no height and pointer-events disabled */}
         <div className="sticky top-0 z-10 pointer-events-none h-0">
           {/* Relative parent for absolutely-positioned button */}

@@ -38,7 +38,7 @@ const Appbar = () => {
 
 						<div
 							title='Uia Dart'
-							className='h-10 w-10 rounded-full bg-cover bg-center shadow-inner'
+							className='h-10 w-10 bg-cover bg-center shadow-inner'
 							style={{
 								backgroundImage:
 									'url(https://www.svgrepo.com/show/261503/trousers.svg)',
