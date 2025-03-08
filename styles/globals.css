@@ -15,9 +15,9 @@ html {
 	--scroll-y: 0px;
   }
   
-  html.modal-open, body.modal-open {
-	overflow: hidden !important;
-	height: auto !important;
+/* global.css or similar */
+body.modal-open {
+	overflow: hidden;
   }
   
   

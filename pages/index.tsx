@@ -259,20 +259,14 @@ useEffect(() => {
 
 
 const openModal = () => {
-  const scrollY = document.documentElement.style.getPropertyValue('--scroll-y');
-  document.body.style.position = 'fixed';
-  document.body.style.top = `-${scrollY}`;
+  document.body.classList.add("modal-open");
   setShowDefaultNames(true);
 };
 
 const closeModal = () => {
-  const scrollY = document.body.style.top;
-  document.body.style.position = '';
-  document.body.style.top = '';
-  window.scrollTo(0, parseInt(scrollY || '0') * -1);
+  document.body.classList.remove("modal-open");
   setShowDefaultNames(false);
 };
-
 
 
   return (
@@ -340,47 +334,41 @@ const closeModal = () => {
   </button>
 
   {showDefaultNames && (
+  <div
+    id="dialog"
+    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-2 py-4 overflow-auto"
+    onClick={closeModal}
+  >
     <div
-      id="dialog"
-      className="fixed inset-0 bg-white bg-opacity-20 flex items-center justify-center pt-safe pb-safe px-safe z-50"
-      // Clicking outside will close the modal
-      onClick={closeModal}
+      className="relative bg-zinc-900 rounded-lg shadow-xl p-4 w-full max-w-md max-h-[90vh] overflow-y-auto"
+      onClick={(e) => e.stopPropagation()}
     >
-      <div
-        className="relative mt-5 mb-4 w-[90vw] max-w-[550px] h-[75vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900"
-        style={{ WebkitOverflowScrolling: 'touch' }}
-        onClick={(e) => e.stopPropagation()}  // Prevent closing when clicking inside the modal
+      <button
+        onClick={closeModal}
+        className="absolute top-2 right-2 px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700"
       >
-        <button
-          onClick={closeModal}
-          className="pointer-events-auto absolute top-2 right-2 px-3 py-1 bg-gray-600 text-white rounded-md hover:bg-gray-700"
-        >
-          X
-        </button>
-        <div className="flex flex-wrap gap-2 mt-2">
-          {defaultNames.map((name) => (
-            <button
-              key={name}
-              type="button"
-              onClick={() => toggleDefaultName(name)}
-              className={`
-                px-3 py-1 text-white rounded-md 
-                transition-colors duration-200
-                ${isNameSelected(name) ? "bg-green-500" : "bg-red-500"}
-                hover:${isNameSelected(name) ? "bg-green-600" : "bg-red-600"}
-              `}
-            >
-              {name}
-            </button>
-          ))}
-        </div>
+        X
+      </button>
+      <div className="flex flex-wrap gap-2 mt-6">
+        {defaultNames.map((name) => (
+          <button
+            key={name}
+            type="button"
+            onClick={() => toggleDefaultName(name)}
+            className={`
+              px-3 py-1 rounded-md text-white transition-colors duration-200
+              ${isNameSelected(name) ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"}
+            `}
+          >
+            {name}
+          </button>
+        ))}
       </div>
     </div>
-  )}
+  </div>
+)}
+
 </div>
-
-
-
           {/* Courts */}
           <div className="flex-row justify-center mt-4">
             <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">
