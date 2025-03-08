@@ -125,8 +125,6 @@ function checkAndPromptReset() {
   };
 
   return (
-    <div className="overflow-y-auto scrollbar-hide">
-
     <Page>
       <Section>
         {/* Center the entire content and limit max width */}
@@ -260,7 +258,6 @@ function checkAndPromptReset() {
         </div>
       </Section>
     </Page>
-    </div>
   );
 };
 
