@@ -43,13 +43,4 @@ html.plt-ios.plt-pwa {
   height: 99.9vh !important;
 }
 
-body::-webkit-scrollbar {
-  display: none;
-}
-
-html, body {
-  overflow: -moz-scrollbars-none; /* For older Firefox */
-  -ms-overflow-style: none; /* For IE and Edge */
-  scrollbar-width: none; /* For modern Firefox */
-}
-
+ 
