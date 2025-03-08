@@ -3,34 +3,26 @@
 @tailwind utilities;
 
 body {
-	@apply min-h-screen select-none bg-zinc-50 text-zinc-900 antialiased p-safe dark:bg-zinc-900 dark:text-zinc-50;
+  @apply min-h-screen select-none bg-zinc-50 text-zinc-900 antialiased p-safe dark:bg-zinc-900 dark:text-zinc-50;
 
-	/* PWA enhancements */
-	-webkit-overflow-scrolling: touch;
-	-webkit-tap-highlight-color: transparent;
-	-webkit-touch-callout: none;
+  /* PWA enhancements */
+  -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
-html, body {
-	height: 100%;
-	overflow: auto;
-	overscroll-behavior: none;
-  }
-  
-  body.modal-open {
-	overflow: hidden;
-  }
-  
-  .touch-none {
-	touch-action: none;
+body.modal-open {
+	height: 100%;            /* REMOVE */
+  overflow: hidden;
+  -webkit-overflow-scrolling: none;
+  overscroll-behavior: none;
+  touch-action: none; 
+}
+
+.touch-none {
+	touch-action: none; /* REMOVE THIS */
   }
   
   .overscroll-contain {
-	overscroll-behavior: contain;
+	overscroll-behavior: none; /* Remove this as well */
   }
-  
-
-  
-  
-  
-  
