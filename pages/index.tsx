@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { forwardRef, useRef, useImperativeHandle, useState, useEffect } from 'react';
 import Page from "@/components/page";
+import BodyLockModal from "@/components/bodyLock";
 import Section from "@/components/section";
 import Input from "@/components/inputs";
 import { useRouter } from "next/router";
 import { generateMatchups } from "@/utils/teamGenerator";
-import { useRef } from "react";
+import ReactModal from 'react-modal'
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from "body-scroll-lock";
 
 const Index = () => {
@@ -116,23 +117,6 @@ const defaultNames = [
   useEffect(() => {
     checkAndPromptReset();
   }, []);
-
-
-const modalRef = useRef<HTMLDivElement>(null);
-
-useEffect(() => {
-  if (showDefaultNames) {
-    disableBodyScroll(document.body);
-  } else {
-    enableBodyScroll(document.body);
-  }
-  return () => {
-    enableBodyScroll(document.body);
-  };
-}, [showDefaultNames]);
-
-
-  
 
   // Handle manual player input changes
   const handlePlayerChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -325,51 +309,39 @@ function checkAndPromptReset() {
               {showDefaultNames ? "Skjul forhåndsdefinerte navn" : "Vis forhåndsdefinerte navn"}
             </button>
 
-            {showDefaultNames && (
-  <div
-    ref={modalRef}
-    className="fixed inset-0 bg-white bg-opacity-20 flex items-center justify-center pt-safe pb-safe px-safe scrollbar-hide"
+            <ReactModal
+  isOpen={showDefaultNames}
+  onRequestClose={() => setShowDefaultNames(false)}
+  overlayClassName="fixed inset-0 bg-white bg-opacity-20 flex items-center justify-center pt-safe pb-safe px-safe"
+  className="relative mt-5 mb-4 w-[90vw] max-w-[550px] max-h-[75vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900"
+>
+  {/* The same content that was inside your manual overlay */}
+  <button
     onClick={() => setShowDefaultNames(false)}
+    className="pointer-events-auto absolute top-2 right-2 px-3 py-1 bg-gray-600 text-white rounded-md hover:bg-gray-700"
   >
-    <div
-      className="relative mt-5 mb-4 w-[90vw] max-w-[550px] max-h-[75vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900"
-      onClick={(e) => e.stopPropagation()}
-    >
-        {/* Sticky container with no height and pointer-events disabled */}
-        <div className="sticky top-0 z-10 pointer-events-none h-0">
-          {/* Relative parent for absolutely-positioned button */}
-          <div className="relative">
-            <button
-              onClick={() => setShowDefaultNames(false)}
-              // Re-enable pointer events only on the button
-              className="pointer-events-auto absolute top-2 right-2 px-3 py-1 bg-gray-600 text-white rounded-md hover:bg-gray-700"
-            >
-              X
-            </button>
-          </div>
-        </div>
+    X
+  </button>
 
-        {/* The actual scrollable content (names) */}
-        <div className="flex flex-wrap gap-2 mt-2">
-          {defaultNames.map((name) => (
-            <button
-              key={name}
-              type="button"
-              onClick={() => toggleDefaultName(name)}
-              className={`
-                px-3 py-1 text-white rounded-md 
-                transition-colors duration-200 
-                ${isNameSelected(name) ? "bg-green-500" : "bg-red-500"} 
-                hover:${isNameSelected(name) ? "bg-green-600" : "bg-red-600"}
-              `}
-            >
-              {name}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  )}
+  <div className="flex flex-wrap gap-2 mt-2">
+    {defaultNames.map((name) => (
+      <button
+        key={name}
+        type="button"
+        onClick={() => toggleDefaultName(name)}
+        className={`
+          px-3 py-1 text-white rounded-md 
+          transition-colors duration-200
+          ${isNameSelected(name) ? "bg-green-500" : "bg-red-500"}
+          hover:${isNameSelected(name) ? "bg-green-600" : "bg-red-600"}
+        `}
+      >
+        {name}
+      </button>
+    ))}
+  </div>
+</ReactModal>
+
 </div>
 
           {/* Courts */}

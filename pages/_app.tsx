@@ -3,6 +3,7 @@ import { ThemeProvider } from "next-themes";
 import type { AppProps } from "next/app";
 import "@/styles/globals.css";
 import router from "next/router";
+import ReactModal from "react-modal";
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -21,6 +22,9 @@ export default function App({ Component, pageProps }: AppProps) {
     // Check if the app is already running in PWA mode
     const isPWA = window.matchMedia("(display-mode: standalone)").matches;
     if (isPWA) return;
+    
+    ReactModal.setAppElement('#__next');
+
 
     // Detect if the user is in Safari
     const userAgent = window.navigator.userAgent.toLowerCase();
