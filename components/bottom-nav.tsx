@@ -53,7 +53,7 @@ const links = [
 	},
 	{
 		label: 'Vev',
-		href: '/story',
+		href: '/resetandwinners',
 		icon: (
 			<svg
 				viewBox='0 0 15 15'

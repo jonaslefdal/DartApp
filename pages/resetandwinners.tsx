@@ -1,8 +1,8 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const Story = () => {
+const ResetAndWinners = () => {
   type Match = {
     team1: string[];
     team2: string[];
@@ -31,12 +31,47 @@ const Story = () => {
     localStorage.removeItem("breakCounts");
     localStorage.removeItem("roundCount");
     localStorage.removeItem("currentCount");
+	localStorage.removeItem("matchWinners");
+    localStorage.removeItem("wins");
   };
+
+	const [wins, setWins] = useState<{ [player: string]: number }>({});
+  
+	useEffect(() => {
+	  const storedWins = localStorage.getItem("wins");
+	  if (storedWins) {
+		setWins(JSON.parse(storedWins));
+	  }
+	}, []);
+  
+	// Convert wins data to CSV format
+	const convertToCSV = (data: { [player: string]: number }): string => {
+	  const rows = [["Player", "Wins"]];
+	  for (const [player, count] of Object.entries(data)) {
+		rows.push([player, count.toString()]);
+	  }
+	  return rows.map(row => row.join(",")).join("\n");
+	};
+  
+	// Trigger CSV download
+	const downloadCSV = () => {
+	  const csvContent = convertToCSV(wins);
+	  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+	  const url = URL.createObjectURL(blob);
+	  const link = document.createElement("a");
+	  link.setAttribute("href", url);
+	  // Give a default filename
+	  link.setAttribute("download", `session_wins_${new Date().toISOString()}.csv`);
+	  link.style.visibility = "hidden";
+	  document.body.appendChild(link);
+	  link.click();
+	  document.body.removeChild(link);
+	};
 
   return (
     <Page>
       <Section>
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-xl text-center font-semibold">
           Denne knappen fjerner all data som hvem som har vært på lag, hvor mange pauser personer har hatt osv..
         </h2>
 
@@ -51,7 +86,7 @@ const Story = () => {
           </button>
         </div>
 
-        <h2 className="text-l mt-6 font-semibold">Du burde ikke trykke på denne mens en sesjon holder på</h2>
+        <h2 className="text-l text-center mt-6 font-semibold">Du burde ikke trykke på denne mens en sesjon holder på</h2>
 
         {/* Custom Modal */}
         {isModalOpen && (
@@ -83,9 +118,46 @@ const Story = () => {
             </div>
           </div>
         )}
+
+<h1 className="text-3xl font-bold text-center mt-10 mb-6">Antall seire</h1>
+        <div className="max-w-md mx-auto">
+          {Object.keys(wins).length > 0 ? (
+            <>
+              <table className="w-full text-start text-white">
+                <thead>
+                  <tr>
+                    <th className="border-b text-start border-gray-600 p-2">Spiller</th>
+                    <th className="border-b text-start border-gray-600 p-2">Seire</th>
+                  </tr>
+                </thead>
+                <tbody>
+				{Object.entries(wins)
+				.sort(([, countA], [, countB]) => countB - countA)
+				.map(([player, count]) => (
+					<tr key={player}>
+					<td className="border-b border-gray-600 p-2">{player}</td>
+					<td className="border-b border-gray-600 p-2">{count}</td>
+					</tr>
+				))}
+                </tbody>
+              </table>
+              <div className="flex justify-center mt-6">
+                <button
+                  onClick={downloadCSV}
+                  className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                >
+                  Eksorter som CSV
+                </button>
+              </div>
+            </>
+          ) : (
+            <p className="text-gray-400 text-center">Det er ingen seiersmestere enda.</p>
+          )}
+        </div>
+	
       </Section>
     </Page>
   );
 };
 
-export default Story;
+export default ResetAndWinners;

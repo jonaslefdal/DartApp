@@ -185,30 +185,35 @@ export const generateMatchups = (
   });
 
   // 3. Sort players by your chosen criteria (e.g. break count)
+  // This ensures players who have had more breaks are prioritized.
   const sortedPlayers = players.sort((a, b) => (breakCounts[b] - breakCounts[a]));
 
-  // 4. Figure out how many courts we can fill
+  // 4. Figure out how many courts we can fill.
   const maxCourtsWeCanFill = Math.floor(sortedPlayers.length / 4);
-  // Get the subset of courts and shuffle them for more randomness
+  // Instead of shuffling courts, simply take the first few.
   const courtsToUse = courts.slice(0, maxCourtsWeCanFill);
-  const shuffledCourts = shuffleArray(courtsToUse);
 
-  // 5. Split off the players who will actually play
+  // 5. Split off the players who will actually play.
   const playersNeeded = courtsToUse.length * 4;
-  const playersForPlay = sortedPlayers.slice(0, playersNeeded);
+  // Select the top players based on break count...
+  let playersForPlay = sortedPlayers.slice(0, playersNeeded);
+  // ... then shuffle them so their court assignment varies.
+  playersForPlay = shuffleArray(playersForPlay);
+
+  // Players on break are the remaining players.
   const playersOnBreak = sortedPlayers.slice(playersNeeded);
 
-  // 6. Use the backtracking approach to form matches for these courts
+  // 6. Use the backtracking approach to form matches for these courts.
   let matches = formMatchesForAllCourts(playersForPlay, courtsToUse.length, pastPairs);
 
   // 7. Fallback logic: if backtracking fails, pair players sequentially allowing repeats.
   if (matches === null) {
     console.warn("No arrangement without repeats was found. Falling back to repeated pairs...");
     let fallbackMatches: Match[] = [];
-    // Clone and shuffle the players so order is randomized
+    // Clone and shuffle the players so order is randomized.
     let playersPool = shuffleArray([...playersForPlay]);
 
-    // Create as many matches as there are courts
+    // Create as many matches as there are courts.
     while (fallbackMatches.length < courtsToUse.length && playersPool.length >= 4) {
       const team1 = getTeam(playersPool, pastPairs, true);
       const team2 = getTeam(playersPool, pastPairs, true);
@@ -218,9 +223,9 @@ export const generateMatchups = (
     matches = fallbackMatches;
   }
 
-  // 8. Build the final Round[] structure using the (shuffled) courts.
+  // 8. Build the final Round[] structure using the organized courts.
   let matchups: Round[] = matches.map((m, i) => ({
-    court: shuffledCourts[i],
+    court: courtsToUse[i],
     matches: [m],
   }));
 
@@ -229,7 +234,7 @@ export const generateMatchups = (
     breakCounts[player] = (breakCounts[player] || 0) + 1;
   });
 
-  // 10. Save updated data
+  // 10. Save updated data.
   localStorage.setItem("matchups", JSON.stringify(matchups));
   localStorage.setItem("onBreak", JSON.stringify(playersOnBreak));
   localStorage.setItem("pastPairs", JSON.stringify(pastPairs));
@@ -237,3 +242,4 @@ export const generateMatchups = (
 
   return { matchups, onBreak: playersOnBreak };
 };
+

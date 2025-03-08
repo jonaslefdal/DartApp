@@ -241,6 +241,8 @@ function checkAndPromptReset() {
       localStorage.removeItem("breakCounts");
       localStorage.removeItem("roundCount");
       localStorage.removeItem("currentCount");
+      localStorage.removeItem("matchWinners");
+      localStorage.removeItem("wins");
       console.log("Pairing data has been reset.");
     }
     // In either case, update the session date to current
