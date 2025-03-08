@@ -248,25 +248,21 @@ function checkAndPromptReset() {
   }
 }
 
-
-useEffect(() => {
-  const handleScroll = () => {
-    document.documentElement.style.setProperty('--scroll-y', `${window.scrollY}px`);
-  };
-  window.addEventListener('scroll', handleScroll);
-  return () => window.removeEventListener('scroll', handleScroll);
-}, []);
-
-
 const openModal = () => {
+  const scrollY = window.scrollY;
+  document.body.style.top = `-${scrollY}px`;
   document.body.classList.add("modal-open");
   setShowDefaultNames(true);
 };
 
 const closeModal = () => {
+  const scrollY = document.body.style.top;
+  document.body.style.top = '';
   document.body.classList.remove("modal-open");
+  window.scrollTo(0, parseInt(scrollY || '0') * -1);
   setShowDefaultNames(false);
 };
+
 
 
   return (

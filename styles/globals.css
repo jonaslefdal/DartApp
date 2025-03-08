@@ -15,10 +15,16 @@ html {
 	--scroll-y: 0px;
   }
   
-/* global.css or similar */
-body.modal-open {
-	overflow: hidden;
+  body.modal-open {
+	position: fixed;
+	top: calc(var(--scroll-y) * -1);
+	left: 0;
+	right: 0;
+	overflow-y: hidden;
+	width: 100%;
+	touch-action: none; /* enhances stability on mobile */
   }
+  
   
   
   
