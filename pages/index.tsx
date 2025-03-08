@@ -322,11 +322,11 @@ function checkAndPromptReset() {
 
             {showDefaultNames && (
     <div
-      className="fixed inset-0 bg-white text-black bg-opacity-20 flex items-center justify-center pt-safe-top"
+      className="fixed inset-0 bg-white text-black bg-opacity-20 flex items-center justify-center sm:pt-10 pt-safe px-safe scrollbar-hide"
       onClick={() => setShowDefaultNames(false)}
     >
       <div
-        className="relative mt-2 w-[90vw] max-w-[550px] max-h-[75vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900 scrollbar-hide"
+        className="relative mt-2 w-[90vw] max-w-[550px] max-h-[75vh] overflow-y-auto rounded shadow-md p-4 pt-safe bg-zinc-900"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Sticky container with no height and pointer-events disabled */}
