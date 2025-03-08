@@ -222,7 +222,7 @@ function checkAndPromptReset() {
   if (storedSessionDate !== currentSessionDate) {
     // Mobile-friendly prompt
     const shouldReset = window.confirm(
-      "It's a new day since your last matchup. Would you like to reset pairing data?"
+      "Hei, det er en dag siden sist du spillte, vil du resette data?"
     );
 
     if (shouldReset) {
@@ -308,25 +308,50 @@ function checkAndPromptReset() {
             </button>
 
             {showDefaultNames && (
-              <div className="mt-2 max-h-60 overflow-y-auto border p-2 rounded">
-                <div className="flex flex-wrap gap-2">
-                  {defaultNames.map((name) => (
-                    <button
-                      key={name}
-                      type="button"
-                      onClick={() => toggleDefaultName(name)}
-                      className={`px-3 py-1 text-white rounded-md 
-                      transition-colors duration-200
-                      ${isNameSelected(name) ? "bg-green-500" : "bg-red-500"} 
-                      hover:${isNameSelected(name) ? "bg-green-600" : "bg-red-600"}`}
-                    >
-                      {name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+    <div
+      className="fixed inset-0 bg-white text-black bg-opacity-20 flex items-center justify-center"
+      onClick={() => setShowDefaultNames(false)}
+    >
+      <div
+        className="relative w-[90vw] h-[90vh] max-w-[550px] max-h-[80vh] overflow-y-auto rounded shadow-md p-4 bg-zinc-900"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Sticky container with no height and pointer-events disabled */}
+        <div className="sticky top-0 z-10 pointer-events-none h-0">
+          {/* Relative parent for absolutely-positioned button */}
+          <div className="relative">
+            <button
+              onClick={() => setShowDefaultNames(false)}
+              // Re-enable pointer events only on the button
+              className="pointer-events-auto absolute top-2 right-2 px-3 py-1 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+            >
+              X
+            </button>
           </div>
+        </div>
+
+        {/* The actual scrollable content (names) */}
+        <div className="flex flex-wrap gap-2 mt-2">
+          {defaultNames.map((name) => (
+            <button
+              key={name}
+              type="button"
+              onClick={() => toggleDefaultName(name)}
+              className={`
+                px-3 py-1 text-white rounded-md 
+                transition-colors duration-200 
+                ${isNameSelected(name) ? "bg-green-500" : "bg-red-500"} 
+                hover:${isNameSelected(name) ? "bg-green-600" : "bg-red-600"}
+              `}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )}
+</div>
 
           {/* Courts */}
           <div className="flex-row justify-center mt-4">

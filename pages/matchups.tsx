@@ -56,7 +56,7 @@ function checkAndPromptReset() {
   if (storedSessionDate !== currentSessionDate) {
     // Mobile-friendly prompt
     const shouldReset = window.confirm(
-      "It's a new day since your last matchup. Would you like to reset pairing data?"
+      "Hei, det er en dag siden sist du spillte, vil du resette data?"
     );
 
     if (shouldReset) {
@@ -167,23 +167,26 @@ function checkAndPromptReset() {
                         {/* Left side (Team 1) */}
                         <div
                           onClick={() => handleWin(roundIndex, matchIndex, "left")}
-                          className={`flex flex-col items-center w-full sm:w-1/2 cursor-pointer 
+                          className={`flex flex-col items-center w-full sm:w-1/2 cursor-pointer
                             rounded-md transition-colors duration-300 p-2
-                            ${
-                              matchWinners[matchKey] === "left"
-                                ? "bg-green-700"
-                                : "bg-gray-800"
-                            }
+                            ${matchWinners[matchKey] === "left" ? "bg-green-700" : "bg-gray-800"}
                           `}
                         >
                           {match.team1.map((player, i) => (
-                            <p key={i} className="text-white font-medium text-lg">
-                              {player}
-                            </p>
+                                        <p
+                                          key={i}
+                                          className="
+                                            text-white font-medium text-sm text-center
+                                            w-full sm:max-w-full
+                                            whitespace-normal break-normal
+                                          "
+                                        >
+                                           {player}
+                                         </p>
                           ))}
                         </div>
 
-                        <div className="text-white text-5xl font-bold flex items-center justify-center -mt-3 -mb-2">
+                        <div className="text-white text-4xl font-bold flex items-center justify-center -mt-3 -mb-2">
                           🎯
                         </div>
 
@@ -192,19 +195,20 @@ function checkAndPromptReset() {
                           onClick={() => handleWin(roundIndex, matchIndex, "right")}
                           className={`flex flex-col items-center w-full sm:w-1/2 cursor-pointer
                             rounded-md transition-colors duration-300 p-2
-                            ${
-                              matchWinners[matchKey] === "right"
-                                ? "bg-green-700"
-                                : "bg-gray-800"
-                            }
+                            ${matchWinners[matchKey] === "right" ? "bg-green-700" : "bg-gray-800"}
                           `}
-                        
                         >
                
 
                           {match.team2.map((player, i) => (
-                            <p key={i} className="text-white font-medium text-lg">
-                              {player}
+                            <p
+                                          key={i}
+                                          className="
+                                            text-white font-medium text-sm text-center
+                                            w-full sm:max-w-full
+                                            whitespace-normal break-normal
+                                          "
+                                        >                              {player}
                             </p>
                           ))}
                         </div>
@@ -224,18 +228,21 @@ function checkAndPromptReset() {
             </p>
           )}
 
-<h2 className="text-2xl font-bold text-center">På pause</h2>
-
+          <h2 className="text-2xl font-bold text-center">På pause</h2>
           <div className="flex flex-wrap justify-center gap-4">
             {onBreak.map((player, i) => (
               <span 
                 key={i} 
-                className="w-36 h-12 py-7 flex items-center justify-center bg-red-500 text-white font-semibold rounded-md shadow-md text-center"
+
+              className="py-2 px-2 flex items-center justify-center
+                bg-red-500 text-white font-medium text-sm rounded-md shadow-md
+                text-center whitespace-normal break-normal"
               >
                 {player}
               </span>
             ))}
           </div>
+
 
 
           {/* Generate New Teams Button */}
