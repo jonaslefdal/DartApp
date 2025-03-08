@@ -7,6 +7,16 @@ import ReactModal from "react-modal";
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
+    function setVh() {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    window.addEventListener('resize', setVh);
+    setVh();
+    return () => window.removeEventListener('resize', setVh);
+  }, []);
+  
+  useEffect(() => {
     if ("serviceWorker" in navigator) {
       const swPath = process.env.NODE_ENV === "production" ? "/DartApp/sw.js" : "/sw.js";
 
@@ -35,17 +45,6 @@ export default function App({ Component, pageProps }: AppProps) {
       router.replace("/install");
     }
   }, []);
-
-  useEffect(() => {
-    function setVh() {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    }
-    window.addEventListener('resize', setVh);
-    setVh();
-    return () => window.removeEventListener('resize', setVh);
-  }, []);
-  
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange>
