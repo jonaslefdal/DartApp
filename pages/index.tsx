@@ -1,6 +1,5 @@
 import { forwardRef, useRef, useImperativeHandle, useState, useEffect } from 'react';
 import Page from "@/components/page";
-import BodyLockModal from "@/components/bodyLock";
 import Section from "@/components/section";
 import Input from "@/components/inputs";
 import { useRouter } from "next/router";
