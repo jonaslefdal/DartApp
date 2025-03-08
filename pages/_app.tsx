@@ -38,8 +38,12 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange>
+      <div className="wrapper">
+      <div className="scrollable">
       <div className="no-scrollbar overflow-y-auto h-screen">
       <Component {...pageProps} />
+      </div>
+      </div>
       </div>
     </ThemeProvider>
   );
