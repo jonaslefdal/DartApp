@@ -11,19 +11,25 @@ body {
 	-webkit-touch-callout: none;
 }
 
-html {
-	--scroll-y: 0px;
+html, body {
+	height: 100%;
+	overflow: auto;
+	overscroll-behavior: none;
   }
   
   body.modal-open {
-	position: fixed;
-	top: calc(var(--scroll-y) * -1);
-	left: 0;
-	right: 0;
-	overflow-y: hidden;
-	width: 100%;
-	touch-action: none; /* enhances stability on mobile */
+	overflow: hidden;
   }
+  
+  .touch-none {
+	touch-action: none;
+  }
+  
+  .overscroll-contain {
+	overscroll-behavior: contain;
+  }
+  
+
   
   
   
