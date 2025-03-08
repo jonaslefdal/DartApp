@@ -6,7 +6,7 @@ module.exports = {
 	darkMode: 'class',
 	plugins: [
 	  require('tailwindcss-safe-area'),
-	  require('tailwind-scrollbar-hide')
+	  require('tailwind-scrollbar-hide'),
 	],
   }
   

@@ -5,6 +5,7 @@ import Section from "@/components/section";
 import { generateMatchups } from "@/utils/teamGenerator";
 
 
+
 type Match = {
   team1: string[];
   team2: string[];
