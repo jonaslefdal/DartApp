@@ -37,12 +37,12 @@ const Appbar = () => {
 						</div>
 
 						<div
-  title="Uia Dart"
-  className="h-12 w-12 bg-cover bg-center rounded-lg" // Adds rounded corners
-  style={{
-    backgroundImage: "url(/images/icon-maskable-ico-512.png)", // Use maskable icon
-  }}
-/>
+						title="Uia Dart"
+						className="h-12 w-12 bg-cover bg-center rounded-lg" // Adds rounded corners
+						style={{
+							backgroundImage: "url(/images/icon-maskable-ico-512.png)", // Use maskable icon
+						}}
+						/>
 
 					</nav>
 				</div>
