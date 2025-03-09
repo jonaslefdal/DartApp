@@ -1,10 +1,13 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import Image from "next/image";
 
 const links = [
 	{ label: 'Reset', href: '/resetandwinners' },
 	{ label: 'Matchups', href: '/matchups' },
 ]
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 const Appbar = () => {
 	const router = useRouter()
@@ -36,13 +39,14 @@ const Appbar = () => {
 							</div>
 						</div>
 
-						<div
-						title="Uia Dart"
-						className="h-12 w-12 bg-cover bg-center rounded-lg" // Adds rounded corners
-						style={{
-							backgroundImage: "url(/images/icon-maskable-ico-512.png)", // Use maskable icon
-						}}
+						<Image
+						src={`${basePath}/images/icon-maskable-ico-512.png`}
+						alt="Uia Dart"
+						width={48}
+						height={48}
+						className="rounded-lg"
 						/>
+
 
 					</nav>
 				</div>
