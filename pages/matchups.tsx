@@ -209,7 +209,7 @@ const Matchups = () => {
                   key={roundIndex}
                   className="bg-gray-800 p-4 rounded-lg shadow-lg space-y-4"
                 >
-                  <h3 className="text-lg font-semibold text-center text-white">
+                  <h3 className="text-xl font-semibold text-center text-white">
                     {round.court}
                   </h3>
 
@@ -232,14 +232,14 @@ const Matchups = () => {
                             {match.team1.map((player, i) => (
                               <p
                                 key={i}
-                                className="text-white font-l text-sm text-center w-full sm:max-w-full whitespace-normal break-normal"
+                                className="text-white font-medium md:text-base lg:text-sm text-center w-full sm:max-w-full whitespace-normal break-normal"
                               >
                                 {player} 
                               </p>
                             ))}
                           </div>
 
-                          <div className="text-white text-4xl font-bold flex items-center justify-center -mt-3 -mb-2">
+                          <div className="text-white text-3xl font-bold flex items-center justify-center -mt-3 -mb-2">
                             🎯
                           </div>
 
@@ -254,7 +254,7 @@ const Matchups = () => {
                             {match.team2.map((player, i) => (
                               <p
                                 key={i}
-                                className="text-white font-medium text-sm text-center w-full sm:max-w-full whitespace-normal break-normal"
+                                className="text-white font-medium md:text-base lg:text-sm text-center w-full sm:max-w-full whitespace-normal break-normal"
                               >
                                 {player}
                               </p>

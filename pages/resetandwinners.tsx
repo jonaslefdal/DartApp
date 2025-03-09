@@ -44,29 +44,33 @@ const ResetAndWinners = () => {
 	  }
 	}, []);
   
-	// Convert wins data to CSV format
-	const convertToCSV = (data: { [player: string]: number }): string => {
-	  const rows = [["Player", "Wins"]];
-	  for (const [player, count] of Object.entries(data)) {
-		rows.push([player, count.toString()]);
-	  }
-	  return rows.map(row => row.join(",")).join("\n");
-	};
+  const convertToCSV = (data: { [player: string]: number }): string => {
+    const rows = [
+      ["Match Result Export"],
+      ["Player", "Wins"],
+      ...Object.entries(data)
+        .sort(([, countA], [, countB]) => countB - countA)
+        .map(([player, count]) => [player, count])
+    ];
   
-	// Trigger CSV download
-	const downloadCSV = () => {
-	  const csvContent = convertToCSV(wins);
-	  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-	  const url = URL.createObjectURL(blob);
-	  const link = document.createElement("a");
-	  link.setAttribute("href", url);
-	  // Give a default filename
-	  link.setAttribute("download", `session_wins_${new Date().toISOString()}.csv`);
-	  link.style.visibility = "hidden";
-	  document.body.appendChild(link);
-	  link.click();
-	  document.body.removeChild(link);
-	};
+    return rows.map(row => row.join(";")).join("\n"); // Change comma to semicolon
+  };
+  
+  
+  const downloadCSV = () => {
+    const csvContent = "\uFEFF" + convertToCSV(wins); // Add BOM for UTF-8 encoding
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+  
+    link.setAttribute("href", url);
+    link.setAttribute("download", `session_wins_${new Date().toISOString()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  
+  
 
   return (
     <Page>

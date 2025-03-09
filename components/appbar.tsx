@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 const links = [
-	{ label: 'Vev', href: '/resetandwinners' },
+	{ label: 'Reset', href: '/resetandwinners' },
 	{ label: 'Matchups', href: '/matchups' },
 ]
 
@@ -14,7 +14,7 @@ const Appbar = () => {
 			<header className='border-b bg-zinc-100 px-safe dark:border-zinc-800 dark:bg-zinc-900'>
 				<div className='mx-auto flex h-20 max-w-screen-md items-center justify-between px-6'>
 					<Link href='/'>
-						<h1 className='font-medium'>Vev kjører dart</h1>
+						<h1 className='font-medium'>UIA kjører dart</h1>
 					</Link>
 
 					<nav className='flex items-center space-x-6'>
@@ -37,13 +37,13 @@ const Appbar = () => {
 						</div>
 
 						<div
-							title='Uia Dart'
-							className='h-10 w-10 bg-cover bg-center shadow-inner'
-							style={{
-								backgroundImage:
-									'url(https://www.svgrepo.com/show/261503/trousers.svg)',
-							}}
-						/>
+  title="Uia Dart"
+  className="h-12 w-12 bg-cover bg-center rounded-lg" // Adds rounded corners
+  style={{
+    backgroundImage: "url(/images/icon-maskable-ico-512.png)", // Use maskable icon
+  }}
+/>
+
 					</nav>
 				</div>
 			</header>

@@ -19,6 +19,10 @@ body.modal-open {
   touch-action: none; 
 }
 
+body, table, td, th {
+  user-select: text !important;
+}
+
 .touch-none {
 	touch-action: none; 
   }
