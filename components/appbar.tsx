@@ -46,8 +46,6 @@ const Appbar = () => {
 						height={48}
 						className="rounded-lg"
 						/>
-
-
 					</nav>
 				</div>
 			</header>

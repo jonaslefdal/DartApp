@@ -33,6 +33,9 @@ const Index = () => {
   // Whether to show the predefined names panel
   const [showDefaultNames, setShowDefaultNames] = useState(false);
 
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+
+
   // Hardcoded list of over 60 names
 // Replace your existing defaultNames array with these names:
 const defaultNames = [
@@ -114,9 +117,7 @@ const defaultNames = [
     }
   }, [courts, isLoaded]);
 
-  useEffect(() => {
-    checkAndPromptReset();
-  }, []);
+
 
   // Handle manual player input changes
   const handlePlayerChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -220,17 +221,23 @@ const defaultNames = [
 
 
   // Helper function to prompt for resetting data
-function checkAndPromptReset() {
-  const currentSessionDate = new Date().toDateString();
-  const storedSessionDate = localStorage.getItem("sessionDate");
+  useEffect(() => {
+    const currentSessionDate = new Date().toDateString();
+    const storedSessionDate = localStorage.getItem("sessionDate");
+  
+    if (storedSessionDate !== currentSessionDate) {
+      setIsResetModalOpen(true); // Show the reset modal
+    }
+  }, []);
 
-  if (storedSessionDate !== currentSessionDate) {
-    // Mobile-friendly prompt
-    const shouldReset = window.confirm(
-      "Hei, det er en dag siden sist du spillte, vil du resette data?"
-    );
+  const updateSessionDate = () => {
+    const currentSessionDate = new Date().toDateString();
+    localStorage.setItem("sessionDate", currentSessionDate);
+  }
+  
 
-    if (shouldReset) {
+  const clearData = () => {
+      updateSessionDate();
       localStorage.setItem("courts", JSON.stringify(["Bane 1", "Bane 2", "Bane 3", "Bane 4"]));
       localStorage.removeItem("matchups");
       localStorage.removeItem("onBreak");
@@ -244,11 +251,8 @@ function checkAndPromptReset() {
       localStorage.removeItem("matchWinners");
       localStorage.removeItem("wins");
       console.log("Pairing data has been reset.");
+      window.location.reload();
     }
-    // In either case, update the session date to current
-    localStorage.setItem("sessionDate", currentSessionDate);
-  }
-}
 
 const modalRef = useRef<HTMLDivElement>(null);
 
@@ -418,6 +422,39 @@ const closeModal = () => {
             </button>
           </div>
         </form>
+
+        {/* Custom Reset Prompt Modal */}
+        {isResetModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-zinc-900 p-6 rounded-lg shadow-lg w-96">
+              <h3 className="text-lg font-semibold">Vil du resette data?</h3>
+              <p className="text-sm text-white-600 mt-2">
+                Hei, det er en dag siden sist du spilte. Vil du resette data?
+              </p>
+
+              {/* Modal Actions */}
+              <div className="mt-6 flex justify-end gap-4">
+                <button
+                  className="px-4 py-2 text-white-700 border border-gray-300 rounded-md hover:bg-gray-100"
+                  onClick={() => {updateSessionDate();
+                    setIsResetModalOpen(false)}}
+                >
+                  Avbryt
+                </button>
+                <button
+                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                  onClick={() => {
+                    clearData(); // Reset data
+                    setIsResetModalOpen(false); // Close modal
+                  }}
+                >
+                  Ja, reset data
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </Section>
     </Page>
   );

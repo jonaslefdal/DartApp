@@ -31,8 +31,10 @@ const ResetAndWinners = () => {
     localStorage.removeItem("breakCounts");
     localStorage.removeItem("roundCount");
     localStorage.removeItem("currentCount");
-	localStorage.removeItem("matchWinners");
+	  localStorage.removeItem("matchWinners");
     localStorage.removeItem("wins");
+
+    window.location.reload();
   };
 
 	const [wins, setWins] = useState<{ [player: string]: number }>({});
