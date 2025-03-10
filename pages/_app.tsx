@@ -39,7 +39,7 @@ export default function App({ Component, pageProps }: AppProps) {
       document.documentElement.style.setProperty('--bottom-offset', 'env(safe-area-inset-bottom)');
       return;
     } else {
-      document.documentElement.style.setProperty('--bottom-offset', '0px');
+      document.documentElement.style.setProperty('--bottom-offset', 'env(safe-area-inset-bottom)');
     }
       
     // Detect if the user is in Safari
