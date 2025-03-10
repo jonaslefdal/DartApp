@@ -237,7 +237,7 @@ useEffect(() => {
                             onClick={() => handleWin(roundIndex, matchIndex, "left")}
                             className={`flex flex-col items-center w-full sm:w-1/2 cursor-pointer
                               rounded-md transition-colors duration-300 p-2
-                              ${matchWinners[matchKey] === "left" ? "bg-green-700" : "bg-gray-800"}
+                              ${matchWinners[matchKey] === "left" ? "bg-green-600" : "bg-gray-800"}
                             `}
                           >
                             {match.team1.map((player, i) => (
@@ -259,7 +259,7 @@ useEffect(() => {
                             onClick={() => handleWin(roundIndex, matchIndex, "right")}
                             className={`flex flex-col items-center w-full sm:w-1/2 cursor-pointer
                               rounded-md transition-colors duration-300 p-2
-                              ${matchWinners[matchKey] === "right" ? "bg-green-700" : "bg-gray-800"}
+                              ${matchWinners[matchKey] === "right" ? "bg-green-600" : "bg-gray-800"}
                             `}
                           >
                             {match.team2.map((player, i) => (
