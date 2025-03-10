@@ -32,15 +32,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
     ReactModal.setAppElement('#__next');
 
-    // Check if the app is already running in PWA mode
-    const isPWA = window.matchMedia("(display-mode: standalone)").matches;
-    if (isPWA) {
+
       // Use the safe-area inset for the bottom (if available)
       document.documentElement.style.setProperty('--bottom-offset', 'env(safe-area-inset-bottom)');
-      return;
-    } else {
-      document.documentElement.style.setProperty('--bottom-offset', '0px');
-    }
       
     // Detect if the user is in Safari
     const userAgent = window.navigator.userAgent.toLowerCase();
