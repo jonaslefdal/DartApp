@@ -300,7 +300,7 @@ useEffect(() => {
               <span
                 key={i}
 
-                className="w-30 sm:h-14 h-12 flex items-center justify-center bg-red-500 text-white font-medium text-sm sm:text-base rounded-md shadow-md text-center px-2"
+                className="w-[140px] sm:h-14 h-12 flex items-center justify-center bg-red-500 text-white font-medium text-sm sm:text-base rounded-md shadow-md text-center px-2"
 
               >
                 {player}
