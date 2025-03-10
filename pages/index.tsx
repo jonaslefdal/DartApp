@@ -32,8 +32,9 @@ const Index = () => {
 
   // Whether to show the predefined names panel
   const [showDefaultNames, setShowDefaultNames] = useState(false);
-
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [matchWinners, setMatchWinners] = useState<{ [key: string]: "left" | "right" }>({});
+
 
 
   // Hardcoded list of over 60 names
@@ -209,6 +210,10 @@ const defaultNames = [
     let currentRoundCount = storedRoundCount ? parseInt(storedRoundCount, 10) : 0;
     currentRoundCount += 1;
     localStorage.setItem("roundCount", currentRoundCount.toString());
+
+     // Reset winners each time we generate new teams
+     localStorage.removeItem("matchWinners");
+     setMatchWinners({});
 
     // Filter out any empty strings from the players array
     const finalPlayers = players.filter((p) => p.trim() !== "");

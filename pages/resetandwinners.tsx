@@ -112,9 +112,11 @@ const importLocalStorage = () => {
     }
     setImportCode(""); 
     setShowImportSuccess(true);
-    setTimeout(() => setShowImportSuccess(false), 2000); 
+    setTimeout(() => {
+      window.location.reload();
+    }, 500); 
   } catch (error) {
-    setShowImportFail({ show: true, message: "Ukjent feil under import" });
+    setShowImportFail({ show: true, message: "Feil ved import!" });
     setTimeout(() => setShowImportFail({ show: false, message: "" }), 2000);
   }
 };
@@ -275,32 +277,61 @@ const importLocalStorage = () => {
 
         {showImportSuccess && (
         <div 
-          className="fixed left-0 w-full flex justify-center z-50" 
-          style={{ top: `calc(env(safe-area-inset-top, 0px) + 56px)` }} 
+          
+        className="fixed left-1/2 transform -translate-x-1/2 z-50 bg-green-500 text-white py-3 px-5 rounded-xl shadow-md flex items-center gap-2 transition-opacity duration-300 opacity-100 flex-nowrap"
+
+        style={{ top: `calc(env(safe-area-inset-top, 0px) + 56px)` }} // 56px is an estimate for navbar height
+      >
+        <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        viewBox="0 0 24 24" 
+        fill="white" 
+        className="w-5 h-5 flex-shrink-0"
         >
-          <div className="bg-green-600 text-white py-2 px-6 rounded-md shadow-lg">
-            ✅ Importert vellykket!
-          </div>
+        <path fillRule="evenodd" d="M21.707 4.293a1 1 0 0 1 0 1.414l-12 12a1 1 0 0 1-1.414 0l-6-6a1 1 0 0 1 1.414-1.414L9 15.586 20.293 4.293a1 1 0 0 1 1.414 0z" clipRule="evenodd" />
+      </svg>
+          <span className="whitespace-nowrap min-w-0 overflow-hidden text-ellipsis">
+            Importert vellykket!
+            </span>
         </div>
       )}
         {showCopySuccess && (
         <div 
-          className="fixed left-0 w-full flex justify-center z-50" 
+          
+          className="fixed left-1/2 transform -translate-x-1/2 z-50 bg-green-500 text-white py-3 px-5 rounded-xl shadow-md flex items-center gap-2 transition-opacity duration-300 opacity-100 flex-nowrap"
+
           style={{ top: `calc(env(safe-area-inset-top, 0px) + 56px)` }} // 56px is an estimate for navbar height
         >
-          <div className="bg-green-600 text-white py-2 px-6 rounded-md shadow-lg">
-            ✅ Kode kopiert!
-          </div>
-        </div>
+          <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          viewBox="0 0 24 24" 
+          fill="white" 
+          className="w-5 h-5 flex-shrink-0"
+          >
+          <path fillRule="evenodd" d="M21.707 4.293a1 1 0 0 1 0 1.414l-12 12a1 1 0 0 1-1.414 0l-6-6a1 1 0 0 1 1.414-1.414L9 15.586 20.293 4.293a1 1 0 0 1 1.414 0z" clipRule="evenodd" />
+        </svg>
+        
+        <span className="whitespace-nowrap min-w-0 overflow-hidden text-ellipsis">
+        Kode kopiert!</span>
+        </div>  
       )}
         {showImportFail.show && (
         <div 
-          className="fixed left-0 w-full flex justify-center z-50" 
+        className="fixed left-1/2 transform -translate-x-1/2 z-50 bg-red-600 text-white py-3 px-5 rounded-xl shadow-md flex items-center gap-2 transition-opacity duration-300 opacity-100 flex-nowrap"
+
           style={{ top: `calc(env(safe-area-inset-top, 0px) + 56px)` }} // 56px is an estimate for navbar height
         >
-          <div className="bg-red-600 text-white py-2 px-6 rounded-md shadow-lg">
-            ⚠️ {showImportFail.message}
-          </div>
+          <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      viewBox="0 0 24 24" 
+      fill="white" 
+      className="w-5 h-5 flex-shrink-0"
+      >
+        <path fillRule="evenodd" d="M6.293 6.293a1 1 0 0 1 1.414 0L12 10.586l4.293-4.293a1 1 0 1 1 1.414 1.414L13.414 12l4.293 4.293a1 1 0 1 1-1.414 1.414L12 13.414l-4.293 4.293a1 1 0 1 1-1.414-1.414L10.586 12 6.293 7.707a1 1 0 0 1 0-1.414z" clipRule="evenodd" />
+      </svg>
+      
+      <span className="whitespace-nowrap min-w-0 overflow-hidden text-ellipsis">
+      {showImportFail.message}</span>
         </div>
       )}
 

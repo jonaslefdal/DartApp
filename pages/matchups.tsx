@@ -192,7 +192,7 @@ useEffect(() => {
     <Page>
       <Section>
         {/* Center the entire content and limit max width */}
-        <div className="max-w-md mx-auto space-y-6 no-scrollbar overflow-y-auto">
+        <div className="max-w-lg mx-auto space-y-6 no-scrollbar overflow-y-auto">
           {roundCount > 9 && (
             <div className="bg-red-500 text-white p-4 rounded-md">
               <p className="text-center font-bold">
@@ -283,21 +283,33 @@ useEffect(() => {
               ))
           ) : (
             <p className="text-gray-400 text-center">
-              No matchups found. Go back and generate teams!
+              Ingen kamper funnet. Gå tilbake og generer lag!
             </p>
           )}
-
-          <h2 className="text-2xl font-bold text-center">På pause</h2>
-          <div className="flex flex-wrap justify-center gap-4">
+        
+        {onBreak.length > 0 && (
+            <div>
+        <h2 className="text-2xl font-bold text-center text-white mb-3 flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className="w-5 h-5">
+        <path fillRule="evenodd" d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" clipRule="evenodd" />
+          </svg>
+            På pause</h2>
+          <div className="flex flex-wrap justify-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {onBreak.map((player, i) => (
               <span
                 key={i}
-                className="py-2 px-2 flex items-center justify-center bg-red-500 text-white font-medium text-sm rounded-md shadow-md text-center whitespace-normal break-normal"
+
+                className="w-30 sm:h-14 h-12 flex items-center justify-center bg-red-500 text-white font-medium text-sm sm:text-base rounded-md shadow-md text-center px-2"
+
               >
                 {player}
               </span>
             ))}
           </div>
+          </div>
+          </div>
+)}
 
           {/* Generate New Teams Button */}
           <div className="flex justify-center">
