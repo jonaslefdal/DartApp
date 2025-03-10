@@ -1,6 +1,7 @@
 import Page from "@/components/page";
 import Section from "@/components/section";
 import { useEffect, useState } from "react";
+import LZString from "lz-string";
 
 const ResetAndWinners = () => {
   type Match = {
@@ -15,6 +16,13 @@ const ResetAndWinners = () => {
 
   const [courts, setCourts] = useState<string[]>(["Bane 1", "Bane 2", "Bane 3", "Bane 4"]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalCopyOpen, setIsModalCopyOpen] = useState(false);
+  const [exportedData, setExportedData] = useState(""); // Holds exported text
+  const [importCode, setImportCode] = useState("");
+  const [showImportSuccess, setShowImportSuccess] = useState(false); // State for import success modal
+  const [showCopySuccess, setShowCopySuccess] = useState(false); // State for import success modal
+  const [showImportFail, setShowImportFail] = useState<{ show: boolean; message: string }>({ show: false, message: "" });
+
 
   // Function to clear data
   const clearData = () => {
@@ -71,6 +79,45 @@ const ResetAndWinners = () => {
     link.click();
     document.body.removeChild(link);
   };
+
+
+ // Function to export and compress localStorage data
+ const exportLocalStorage = () => {
+  const jsonData = JSON.stringify(localStorage);
+  const compressedData = LZString.compressToBase64(jsonData);
+  setExportedData(compressedData); // Store in state to display in modal
+  setIsModalCopyOpen(true); // Open modal with data
+};
+
+// Function to copy export data to clipboard
+const copyToClipboard = () => {
+  navigator.clipboard.writeText(exportedData).then(() => {
+    setIsModalCopyOpen(false);
+    setShowCopySuccess(true);
+    setTimeout(() => setShowCopySuccess(false), 2000); 
+  });
+};
+
+const importLocalStorage = () => {
+  try {
+    if (!importCode.trim()) {
+      setShowImportFail({ show: true, message: "Ingen kode skrevet" });
+      setTimeout(() => setShowImportFail({ show: false, message: "" }), 2000);
+      return;
+    }
+    const decompressedData = LZString.decompressFromBase64(importCode);
+    const data = JSON.parse(decompressedData);
+    for (let key in data) {
+      localStorage.setItem(key, data[key]);
+    }
+    setImportCode(""); 
+    setShowImportSuccess(true);
+    setTimeout(() => setShowImportSuccess(false), 2000); 
+  } catch (error) {
+    setShowImportFail({ show: true, message: "Ukjent feil under import" });
+    setTimeout(() => setShowImportFail({ show: false, message: "" }), 2000);
+  }
+};
   
   
 
@@ -152,7 +199,7 @@ const ResetAndWinners = () => {
                   onClick={downloadCSV}
                   className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                 >
-                  Eksorter som CSV
+                  Eksporter som CSV
                 </button>
               </div>
             </>
@@ -160,6 +207,106 @@ const ResetAndWinners = () => {
             <p className="text-gray-400 text-center">Det er ingen seiersmestere enda.</p>
           )}
         </div>
+
+        {/* Button to export all data */}
+        <div className="mt-12 text-center">
+          <button
+            type="button"
+            onClick={exportLocalStorage}
+            className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+          >
+            Del all Data
+          </button>
+        </div>
+
+         {/* Export Modal */}
+         {isModalCopyOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-zinc-900 p-6 rounded-lg shadow-lg w-96">
+              <h3 className="text-lg font-semibold text-white">Kopier data</h3>
+              <p className="text-sm text-gray-400 mt-2">Trykk på knappen for å kopiere eksportert data.</p>
+
+              {/* Input field to show export data */}
+              <input
+                type="text"
+                readOnly
+                value={exportedData}
+                className="w-full mt-4 p-2 text-white rounded-md border border-gray-300"
+              />
+
+              {/* Modal Actions */}
+              <div className="mt-6 flex justify-end gap-4">
+                <button
+                  className="px-4 py-2 text-gray-300 border border-gray-500 rounded-md hover:bg-gray-700"
+                  onClick={() => setIsModalCopyOpen(false)}
+                >
+                  Lukk
+                </button>
+                <button
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  onClick={copyToClipboard}
+                >
+                  Kopier
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+
+        {/* Import Section */}
+        <div className="mt-4 w-full flex justify-center">
+          <div className="flex w-full max-w-sm items-center gap-2">
+            <input
+              type="text"
+              placeholder="Lim inn kode her..."
+              value={importCode}
+              onChange={(e) => setImportCode(e.target.value)}
+              className="flex-1 min-w-0 p-2 border rounded-md text-white bg-gray-800"
+            />
+            <button
+              onClick={importLocalStorage}
+              className="flex whitespace-nowrap px-2 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
+            >
+              Importer Data
+            </button>
+          </div>
+        </div>
+
+        {showImportSuccess && (
+        <div 
+          className="fixed left-0 w-full flex justify-center z-50" 
+          style={{ top: `calc(env(safe-area-inset-top, 0px) + 56px)` }} 
+        >
+          <div className="bg-green-600 text-white py-2 px-6 rounded-md shadow-lg">
+            ✅ Importert vellykket!
+          </div>
+        </div>
+      )}
+        {showCopySuccess && (
+        <div 
+          className="fixed left-0 w-full flex justify-center z-50" 
+          style={{ top: `calc(env(safe-area-inset-top, 0px) + 56px)` }} // 56px is an estimate for navbar height
+        >
+          <div className="bg-green-600 text-white py-2 px-6 rounded-md shadow-lg">
+            ✅ Kode kopiert!
+          </div>
+        </div>
+      )}
+        {showImportFail.show && (
+        <div 
+          className="fixed left-0 w-full flex justify-center z-50" 
+          style={{ top: `calc(env(safe-area-inset-top, 0px) + 56px)` }} // 56px is an estimate for navbar height
+        >
+          <div className="bg-red-600 text-white py-2 px-6 rounded-md shadow-lg">
+            ⚠️ {showImportFail.message}
+          </div>
+        </div>
+      )}
+
+        
+    
+  
 	
       </Section>
     </Page>
