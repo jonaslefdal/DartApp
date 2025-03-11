@@ -6,15 +6,6 @@ import router from "next/router";
 import ReactModal from "react-modal";
 
 export default function App({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    function setVh() {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    }
-    window.addEventListener('resize', setVh);
-    setVh();
-    return () => window.removeEventListener('resize', setVh);
-  }, []);
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {
@@ -32,31 +23,52 @@ export default function App({ Component, pageProps }: AppProps) {
 
     ReactModal.setAppElement('#__next');
 
-    // Check if the app is already running in PWA mode
-    const isPWA = window.matchMedia("(display-mode: standalone)").matches;
-    if (isPWA) {
-      // Use the safe-area inset for the bottom (if available)
-      document.documentElement.style.setProperty('--bottom-offset', 'env(safe-area-inset-bottom)');
-      return;
-    } else {
-      document.documentElement.style.setProperty('--bottom-offset', 'env(safe-area-inset-bottom)');
-    }
-
-    // Detect if the user is in Safari
+    // Detect if the user is in Safari (for redirect)
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isSafari = userAgent.includes("safari") && !userAgent.includes("chrome");
 
-    // If in Safari and NOT a PWA, redirect to install page
-    if (isSafari && router.pathname !== "/install") {
+    const checkStandalone = () => {
+      const isPWA = window.matchMedia("(display-mode: standalone)").matches;
+
+      if (isPWA || isSafari === false || router.pathname === "/install") return;
+
       router.replace("/install");
-    }
+    };
+
+    checkStandalone();
+  }, []);
+
+  // Separate Effect: Dynamically handle safe-area and viewport height
+  useEffect(() => {
+    const setVhAndSafeArea = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+      // Dynamically always set safe-area (regardless of PWA)
+      const bottomInset = getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-bottom)');
+      document.documentElement.style.setProperty(
+        '--bottom-offset',
+        bottomInset || '0px'
+      );
+    };
+
+    // Initial run
+    setVhAndSafeArea();
+
+    // Run on resize and PWA standalone state change
+    window.addEventListener('resize', setVhAndSafeArea);
+    window.matchMedia('(display-mode: standalone)').addEventListener('change', setVhAndSafeArea);
+
+    // Cleanup listeners
+    return () => {
+      window.removeEventListener('resize', setVhAndSafeArea);
+      window.matchMedia('(display-mode: standalone)').removeEventListener('change', setVhAndSafeArea);
+    };
   }, []);
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange>
-      <div
-        className="no-scrollbar overflow-y-auto full-height customScroll"
-      >
+      <div className="no-scrollbar overflow-y-auto full-height customScroll">
         <Component {...pageProps} />
       </div>
     </ThemeProvider>

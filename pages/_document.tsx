@@ -15,7 +15,6 @@ const basePath = isProd ? "/DartApp" : "";
 				/>
 				<link rel="manifest" href={`${basePath}/manifest.json`} />
 
-
 				<meta name="theme-color" content="#18181b" media="(prefers-color-scheme: dark)" />
 				<meta name="theme-color" content="#f4f4f5" media="(prefers-color-scheme: light)" />
 
