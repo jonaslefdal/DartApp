@@ -86,7 +86,7 @@ const defaultNames = [
   "Tea Johansen",
   "Thomas Sandmo",
   "Thomas Fjermestad",
-  "Tora",
+  "Marte Hansen",
   "Tobias Reitan",
   "Truls Fikseaunet",
   "Ulrikke Dietz",
