@@ -6,9 +6,74 @@ import { useRouter } from "next/router";
 import { generateMatchups } from "@/utils/teamGenerator";
 import ReactModal from 'react-modal'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+import * as XLSX from "xlsx";
 
 
 const Index = () => {
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+  
+    const reader = new FileReader();
+    reader.readAsBinaryString(file);
+    reader.onload = (e) => {
+      const binaryString = e.target?.result as string;
+      const workbook = XLSX.read(binaryString, { type: "binary" });
+  
+      // Select the correct sheet
+      const sheetName = "For import"; // Update if needed
+      const sheet = workbook.Sheets[sheetName];
+  
+      if (!sheet) {
+        alert(`Sheet '${sheetName}' not found in the Excel file.`);
+        return;
+      }
+  
+      // Convert sheet to JSON (array of arrays)
+      const jsonData: string[][] = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as string[][];
+  
+      // Find the row containing headers ("Status" & "Navn")
+      const headersRow = jsonData.findIndex(
+        (row) => Array.isArray(row) && row.includes("Status") && row.includes("Navn")
+      );
+  
+      if (headersRow === -1) {
+        alert("Could not find the headers 'Status' and 'Navn' in the sheet.");
+        return;
+      }
+  
+      // Get column indexes
+      const headers = jsonData[headersRow];
+      const statusIndex = headers.indexOf("Status");
+      const nameIndex = headers.indexOf("Navn");
+  
+      if (statusIndex === -1 || nameIndex === -1) {
+        alert("Missing 'Status' or 'Navn' columns in the sheet.");
+        return;
+      }
+  
+      // Extract attendees (people with "Kommer" in "Status")
+      const extractedAttendees = jsonData
+        .slice(headersRow + 1) // Skip headers
+        .filter((row) => row[statusIndex] === "Kommer") // Filter by status
+        .map((row) => row[nameIndex]) // Extract names
+        .filter((name): name is string => typeof name === "string"); // Ensure valid strings
+  
+      // Update players state
+      setPlayers((prevPlayers) => {
+        // Remove empty trailing input if exists
+        const filteredPlayers = prevPlayers.filter((p) => p.trim() !== "");
+        
+        // Merge extracted names with existing ones, ensuring no duplicates
+        const updatedPlayers = Array.from(new Set([...filteredPlayers, ...extractedAttendees]));
+        
+        // Add empty field for manual entry
+        return [...updatedPlayers, ""];
+      });
+    };
+  };
+  
   const router = useRouter();
 
   type Match = {
@@ -277,6 +342,18 @@ const closeModal = () => {
   return (
     <Page>
       <Section>
+      <div className="mt-4">
+  <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">
+    Last opp Excel-fil for påmeldte
+  </h3>
+  <input 
+    type="file" 
+    accept=".xlsx, .xls" 
+    onChange={handleFileUpload} 
+    className="mt-2"
+  />
+</div>
+
         <h2 className="text-xl font-semibold text-zinc-800 dark:text-zinc-200">
           Velg lag nå.
         </h2>

@@ -38,10 +38,7 @@ export default function App({ Component, pageProps }: AppProps) {
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isSafari = userAgent.includes("safari") && !userAgent.includes("chrome");
 
-    // If in Safari and NOT a PWA, redirect to install page
-    if (isSafari && router.pathname !== "/install") {
-      router.replace("/install");
-    }
+
   }, []);
 
   useEffect(() => {
