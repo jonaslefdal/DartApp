@@ -38,6 +38,9 @@ export default function App({ Component, pageProps }: AppProps) {
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isSafari = userAgent.includes("safari") && !userAgent.includes("chrome");
 
+    if (isSafari && router.pathname !== "/install") {
+      router.replace("/install");
+    }
 
   }, []);
 
@@ -54,7 +57,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange>
       <div
-        className="no-scrollbar overflow-y-auto full-height customScroll"
+        className="no-scrollbar overflow-y-auto main-container customScroll"
       >
         <Component {...pageProps} />
       </div>

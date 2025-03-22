@@ -10,17 +10,24 @@ import * as XLSX from "xlsx";
 
 
 const Index = () => {
+  
+  const [selectedFileName, setSelectedFileName] = useState("");
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      setSelectedFileName("");
+      return;
+    }
+    setSelectedFileName(file.name);
   
     const reader = new FileReader();
-    reader.readAsBinaryString(file);
+    reader.readAsArrayBuffer(file);
     reader.onload = (e) => {
-      const binaryString = e.target?.result as string;
-      const workbook = XLSX.read(binaryString, { type: "binary" });
-  
+    const arrayBuffer = e.target?.result;
+    if (arrayBuffer instanceof ArrayBuffer) {
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+    
       // Select the correct sheet
       const sheetName = "For import"; // Update if needed
       const sheet = workbook.Sheets[sheetName];
@@ -70,7 +77,9 @@ const Index = () => {
         
         // Add empty field for manual entry
         return [...updatedPlayers, ""];
+      
       });
+    };
     };
   };
   
@@ -263,7 +272,7 @@ const defaultNames = [
 
   // 1. Define a function to remove all players
   const removeAllPlayers = () => {
-  setPlayers([""]);  // Reset to just an empty input
+  setPlayers([]);  // Reset to just an empty input
   localStorage.setItem("players", JSON.stringify([""]));
   };
 
@@ -342,20 +351,35 @@ const closeModal = () => {
   return (
     <Page>
       <Section>
-      <div className="mt-4">
-  <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">
-    Last opp Excel-fil for påmeldte
-  </h3>
-  <input 
-    type="file" 
-    accept=".xlsx, .xls" 
-    onChange={handleFileUpload} 
-    className="mt-2"
-  />
-</div>
+      <div className="flex flex-col space-y-2">
+      <label className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">
+        Last opp Excel-fil for påmeldte
+      </label>
+      <div>
+        {/* Custom "button" */}
+        <label
+          htmlFor="fileUpload"
+          className="inline-block bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-blue-600"
+        >
+          Velg fil
+        </label>
+        {/* Hidden file input */}
+        <input
+          id="fileUpload"
+          type="file"
+          accept=".xlsx, .xls"
+          onChange={handleFileUpload}
+          className="hidden"
+        />
+        {/* Show selected filename or fallback text */}
+        <span className="ml-2 text-sm">
+          {selectedFileName || "Ingen fil valgt"}
+        </span>
+      </div>
+    </div>
 
-        <h2 className="text-xl font-semibold text-zinc-800 dark:text-zinc-200">
-          Velg lag nå.
+        <h2 className="text-xl mt-4 font-semibold text-zinc-800 dark:text-zinc-200">
+          Velg spiller her.
         </h2>
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-6">
