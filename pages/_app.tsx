@@ -48,6 +48,18 @@ export default function App({ Component, pageProps }: AppProps) {
 
   }, []);
 
+    useEffect(() => {
+    function handleOrientationChange() {
+      window.dispatchEvent(new Event('resize'));
+    }
+      window.addEventListener('orientationchange', handleOrientationChange);
+
+      return () => {
+        window.removeEventListener('orientationchange', handleOrientationChange);
+      };
+    }, []);
+
+
   return (
     <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange>
       <div
