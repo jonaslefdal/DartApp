@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
 body {
   @apply min-h-screen select-none bg-zinc-50 text-zinc-900 antialiased p-safe dark:bg-zinc-900 dark:text-zinc-50;
 
@@ -10,6 +16,8 @@ body {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 }
+
+
 
 body.modal-open {
 	height: 100%;
@@ -63,12 +71,5 @@ body, table, td, th {
     -ms-overflow-style: none; 
     scrollbar-width: none; 
   }
-
-  /* This ensures content isn't hidden behind the bottom nav or home indicator */
-body {
-  padding-bottom: env(safe-area-inset-bottom);
-  /* For older iOS versions that use constant() instead of env(): */
-  padding-bottom: constant(safe-area-inset-bottom);
-}
 
 
