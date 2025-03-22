@@ -17,8 +17,6 @@ body {
   -webkit-touch-callout: none;
 }
 
-
-
 body.modal-open {
 	height: 100%;
   overflow: hidden;
