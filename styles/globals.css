@@ -55,16 +55,20 @@ body, table, td, th {
     height: 100%; /* fallback if dvh is not supported */
   }
 
+  *::-webkit-scrollbar {
+    display: none;
+  }
 
-  /* Hide scrollbars in WebKit browsers (Chrome, Safari, Opera) */
-*::-webkit-scrollbar {
-  display: none;
-}
+  * {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+  }
 
-/* Hide scrollbars in Firefox and IE/Edge */
-* {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  /* This ensures content isn't hidden behind the bottom nav or home indicator */
+body {
+  padding-bottom: env(safe-area-inset-bottom);
+  /* For older iOS versions that use constant() instead of env(): */
+  padding-bottom: constant(safe-area-inset-bottom);
 }
 
 
