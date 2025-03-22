@@ -22,7 +22,7 @@ const Page = ({ title, children }: Props) => (
 			 * Padding top = `appbar` height
 			 * Padding bottom = `bottom-nav` height
 			 */
-			className='mx-auto max-w-screen-md pb-[calc(4rem+env(safe-area-inset-bottom))] pt-20 px-safe'
+			className='mx-auto max-w-screen-md pb-24 pt-20 px-safe'
 		>
 			<div className='p-6'>{children}</div>
 		</main>
