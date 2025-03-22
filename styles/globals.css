@@ -55,17 +55,16 @@ body, table, td, th {
     height: 100%; /* fallback if dvh is not supported */
   }
 
-  * {
-    &::-webkit-scrollbar-thumb {
-    background-color: blue;
-    border-radius: red;
+
+  /* Hide scrollbars in WebKit browsers (Chrome, Safari, Opera) */
+*::-webkit-scrollbar {
+  display: none;
 }
-    &::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-    &::-webkit-scrollbar {
-        width: 4px;
-        height: 4px;
-        background-color: transparent;
-    }
+
+/* Hide scrollbars in Firefox and IE/Edge */
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
+
+
