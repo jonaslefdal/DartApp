@@ -378,11 +378,11 @@ const closeModal = () => {
       </div>
     </div>
 
-        <h2 className="text-xl mt-4 font-semibold text-zinc-800 dark:text-zinc-200">
-          Velg spiller her.
+        <h2 className="text-xl mt-5 font-semibold text-zinc-800 dark:text-zinc-200">
+          Legg til spillere
         </h2>
 
-        <form onSubmit={handleSubmit} className="mt-4 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-3 space-y-6">
          {/* Manual Player Input */}
           <div>
             <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">
@@ -487,7 +487,7 @@ const closeModal = () => {
           {/* Courts */}
           <div className="flex-row justify-center mt-4">
             <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-200">
-              Courts
+              Baner
             </h3>
             {courts.map((court, index) => (
               <div key={`bane-${index}`} className="flex items-center space-x-2">

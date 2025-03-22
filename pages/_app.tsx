@@ -30,13 +30,13 @@ export default function App({ Component, pageProps }: AppProps) {
       // Use the safe-area inset for the bottom (if available)
       document.documentElement.style.setProperty('--bottom-offset', 'env(safe-area-inset-bottom)');
       document.documentElement.style.setProperty('--app-bottom-padding', 'calc(4rem + env(safe-area-inset-bottom))');
-      document.documentElement.style.setProperty('--app-top-padding', 'calc(4rem + env(safe-area-inset-bottom))');
+      document.documentElement.style.setProperty('--app-top-padding', 'calc(3rem + env(safe-area-inset-top))');    
 
       return;
     } else {
       document.documentElement.style.setProperty('--bottom-offset', 'env(safe-area-inset-bottom)');
       document.documentElement.style.setProperty('--app-bottom-padding', 'calc(4rem + env(safe-area-inset-bottom))');
-      document.documentElement.style.setProperty('--app-top-padding', 'calc(4rem + env(safe-area-inset-bottom))');    }
+      document.documentElement.style.setProperty('--app-top-padding', 'calc(4rem + env(safe-area-inset-top))');    }
 
     // Detect if the user is in Safari
     const userAgent = window.navigator.userAgent.toLowerCase();
@@ -61,7 +61,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
       <div
         className="no-scrollbar overflow-y-auto customScroll"
       >
