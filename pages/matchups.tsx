@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/router";
 import Page from "@/components/page";
 import Section from "@/components/section";
 import { generateMatchups } from "@/utils/teamGenerator";
+import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
+import { TConductorInstance } from "react-canvas-confetti/dist/types";
 
 type Match = {
   team1: string[];
@@ -158,6 +160,9 @@ useEffect(() => {
     const updatedWinners = { ...matchWinners, [matchKey]: side };
     setMatchWinners(updatedWinners);
     localStorage.setItem("matchWinners", JSON.stringify(updatedWinners));
+
+    triggerFireworks();
+
   };
 
   const regenerateTeams = () => {
@@ -186,11 +191,34 @@ useEffect(() => {
     const match = court.match(/\d+/); 
     return match ? parseInt(match[0], 10) : 0;
   }
+
+  const confettiRef = useRef<TConductorInstance | null>(null);
+
+  const triggerFireworks = () => {
+    confettiRef.current?.run({ speed: 1, duration: 500 });
+  };
   
 
   return (
     <Page>
       <Section>
+      <Fireworks
+        onInit={({ conductor }) => {
+          confettiRef.current = conductor;
+        }}
+        width="100%"
+        height="100%"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          pointerEvents: "none",
+          zIndex: 9999,
+        }}
+        className="confetti-canvas"
+      />
         {/* Center the entire content and limit max width */}
         <div className="max-w-lg mx-auto space-y-6 no-scrollbar overflow-y-auto">
           {roundCount > 9 && (
